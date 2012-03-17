@@ -1,0 +1,11 @@
+"Valkyrie" finite element solver
+=================================
+http://anvilofcode.wordpress.com
+
+Overview
+---------
+"Valkyrie" is (will be) a simple API for solving truss and frame structures.
+
+Copyright
+---------
+See LICENSE file
