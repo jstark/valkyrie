@@ -8,6 +8,12 @@ if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
 endif (Boost_FOUND)
 
+set (HEADERS
+    ${CMAKE_SOURCE_DIR}/src/version.h)
+
+set (SOURCES
+    ${CMAKE_SOURCE_DIR}/src/version.cpp)
+
 add_subdirectory (src)
 
 ## tests
