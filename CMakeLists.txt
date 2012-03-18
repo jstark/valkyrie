@@ -1,11 +1,12 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8)
 
 project (valkyrie)
 
 ## boost
-find_package(BOOST 1.48.0 REQUIRED)
+find_package(BOOST 1.48.0 COMPONENTS python REQUIRED)
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
+    link_directories (${Boost_LIBRARY_DIRS})
 endif (Boost_FOUND)
 
 set (HEADERS
@@ -15,7 +16,12 @@ set (HEADERS
 set (SOURCES
     ${CMAKE_SOURCE_DIR}/src/version.cpp)
 
+#library sources
 add_subdirectory (src)
+
+#python modules
+add_subdirectory (python)
+
 
 ## tests
 enable_testing()
