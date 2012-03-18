@@ -32,9 +32,4 @@
 #define VK_API_PATCH 0
 #define VK_API_VERSION "0.0.0"
 
-struct VKModel;
-
-extern DLL_PUBLIC struct VKModel* VKModelCreate(void);
-extern DLL_PUBLIC struct VKModel* VKModelDestroy(struct VKModel* model);
-
 #endif // VALKYRIE_H_INCLUDED
