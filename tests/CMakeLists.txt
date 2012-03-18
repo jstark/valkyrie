@@ -1,6 +1,7 @@
 include_directories (../src)
 
-set (TEST_HEADERS ) # empty
+set (TEST_HEADERS
+        test_vk_version.h)
 set (TEST_SOURCES tests.cpp)
 
 add_executable (exec_tests ${SOURCES} ${TEST_HEADERS} ${TEST_SOURCES})

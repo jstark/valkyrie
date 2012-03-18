@@ -9,6 +9,7 @@ if (Boost_FOUND)
 endif (Boost_FOUND)
 
 set (HEADERS
+    ${CMAKE_SOURCE_DIR}/src/valkyrie.h
     ${CMAKE_SOURCE_DIR}/src/version.h)
 
 set (SOURCES
