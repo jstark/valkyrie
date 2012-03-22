@@ -3,7 +3,10 @@ cmake_minimum_required (VERSION 2.8)
 project (valkyrie)
 
 ## boost
-find_package(BOOST 1.48.0 COMPONENTS python REQUIRED)
+set (Boost_USE_STATIC_LIBS ON)
+set (Boost_USE_MULTITHREADED ON)
+set (Boost_USE_STATIC_RUNTIME ON)
+find_package(Boost 1.49.0 COMPONENTS python REQUIRED)
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     link_directories (${Boost_LIBRARY_DIRS})
@@ -11,10 +14,13 @@ endif (Boost_FOUND)
 
 set (HEADERS
     ${CMAKE_SOURCE_DIR}/src/valkyrie.h
-    ${CMAKE_SOURCE_DIR}/src/version.h)
+    ${CMAKE_SOURCE_DIR}/src/version.h
+    ${CMAKE_SOURCE_DIR}/src/node.h)
 
 set (SOURCES
-    ${CMAKE_SOURCE_DIR}/src/version.cpp)
+    ${CMAKE_SOURCE_DIR}/src/version.cpp
+    ${CMAKE_SOURCE_DIR}/src/valkyrie.cpp
+    ${CMAKE_SOURCE_DIR}/src/node.cpp)
 
 #library sources
 add_subdirectory (src)
@@ -22,6 +28,8 @@ add_subdirectory (src)
 #python modules
 add_subdirectory (python)
 
+#lua modules
+add_subdirectory (lua)
 
 ## tests
 enable_testing()
