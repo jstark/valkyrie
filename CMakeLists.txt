@@ -15,12 +15,14 @@ endif (Boost_FOUND)
 set (HEADERS
     ${CMAKE_SOURCE_DIR}/src/valkyrie.h
     ${CMAKE_SOURCE_DIR}/src/version.h
-    ${CMAKE_SOURCE_DIR}/src/node.h)
+    ${CMAKE_SOURCE_DIR}/src/node.h
+    ${CMAKE_SOURCE_DIR}/src/model.h)
 
 set (SOURCES
     ${CMAKE_SOURCE_DIR}/src/version.cpp
     ${CMAKE_SOURCE_DIR}/src/valkyrie.cpp
-    ${CMAKE_SOURCE_DIR}/src/node.cpp)
+    ${CMAKE_SOURCE_DIR}/src/node.cpp
+    ${CMAKE_SOURCE_DIR}/src/model.cpp)
 
 #library sources
 add_subdirectory (src)
