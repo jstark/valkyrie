@@ -36,6 +36,7 @@ extern "C" {
 #define VK_API_PATCH 0
 #define VK_API_VERSION "0.1.0"
 
+/* version related functions */
 DLL_PUBLIC extern int VKApiMajorVersion(void);
 DLL_PUBLIC extern int VKApiMinorVersion(void);
 DLL_PUBLIC extern int VKApiPatchVersion(void);
