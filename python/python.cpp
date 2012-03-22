@@ -28,10 +28,10 @@ BOOST_PYTHON_MODULE (pyvalkyrie)
 
     // node
     class_<Node>("Node", init<int, double, double, double>())
-            .def("id", &Node::get_id)
-            .def("x" , &Node::get_x)
-            .def("y" , &Node::get_y)
-            .def("z" , &Node::get_z)
+            .add_property("id", &Node::get_id)
+            .add_property("x" , &Node::get_x)
+            .add_property("y" , &Node::get_y)
+            .add_property("z" , &Node::get_z)
     ;
 }
 
