@@ -12,12 +12,6 @@ using valkyrie::Node;
 
 BOOST_PYTHON_MODULE (pyvalkyrie)
 {
-    def("major_version", VKApiMajorVersion);
-    def("minor_version", VKApiMinorVersion);
-    def("patch_version", VKApiPatchVersion);
-    def("version", VKApiVersion);
-    def("is_at_least_version", VKApiVersionIsAtLeast);
-
     // version
     class_<Version>("Version", no_init)
             .def("major", &Version::getMajor)
