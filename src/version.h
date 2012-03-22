@@ -2,21 +2,19 @@
 #define VALKYRIE_VERSION_H_INCLUDED
 
 #include "valkyrie.h"
-#include <string>
-#include <boost/noncopyable.hpp>
 
 namespace valkyrie
 {
 
 // provides a simple versioning info for the API
-class DLL_HIDDEN Version : boost::noncopyable
+class DLL_HIDDEN Version
 {
 public:
-    static int getMajor();
-    static int getMinor();
-    static int getPatch();
-    static const std::string getVersion();
-    static bool isAtLeast(int major, int minor, int patch);
+    static const int getMajor();
+    static const int getMinor();
+    static const int getPatch();
+    static const char *getVersion();
+    static const bool isAtLeast(int major, int minor, int patch);
 };//~cl:Version
 
 }//~ ns:valkyrie
