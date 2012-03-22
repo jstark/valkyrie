@@ -7,7 +7,7 @@ namespace valkyrie
 {
 
 // provides a simple versioning info for the API
-class DLL_HIDDEN Version
+class DLL_PUBLIC Version
 {
 public:
     static const int getMajor();
