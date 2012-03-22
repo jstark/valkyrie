@@ -27,6 +27,11 @@ TEST (Version, testVersion)
     ASSERT_EQ(valkyrie::Version::getVersion(), VK_API_VERSION) << "error in getting api version !";
 }
 
+TEST (Version, testIsAtLeast)
+{
+    ASSERT_TRUE(valkyrie::Version::isAtLeast(VK_API_MAJOR, VK_API_MINOR, VK_API_PATCH)) << "error in querying version !";
+}
+
 } //~ ns:
 
 #endif // VALKYRIE_TEST_VK_VERSION_H_INCLUDED
