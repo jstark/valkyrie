@@ -11,6 +11,7 @@ class Material
 public:
     Material(int id, const std::string& name, double E = 2.1e11, double rho = 7800.0);
 
+    const int get_id() const;
     const std::string get_name() const;
     const double get_E() const;
     const double get_rho() const;
