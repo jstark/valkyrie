@@ -35,7 +35,7 @@ BOOST_PYTHON_MODULE (pyvalkyrie)
     ;
 
      // model
-    class_<Model>("Model", init<const std::string&>())
+    class_<Model>("Model", init<int, const std::string&>())
             .add_property("name", &Model::get_name)
             .def("__str__", &Model::get_name)
             .def("add_node", &Model::addNode)

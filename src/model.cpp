@@ -4,9 +4,14 @@
 using valkyrie::Model;
 using valkyrie::Node;
 
-Model::Model(const std::string& modelName)
-    : name_(modelName)
+Model::Model(int id, const std::string& modelName)
+    : id_(id), name_(modelName)
 {
+}
+
+const int Model::get_id() const
+{
+    return id_;
 }
 
 bool Model::addNode(boost::shared_ptr<Node> node)

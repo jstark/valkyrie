@@ -15,13 +15,15 @@ class Node;
 class DLL_PUBLIC Model
 {
 public:
-    explicit Model(const std::string& name);
+    Model(int id, const std::string& name);
 
     bool addNode(boost::shared_ptr<Node> node);
 
     /* properties */
+    const int get_id() const;
     const std::string get_name() const;
 private:
+    int id_;
     const std::string name_;
     std::map<int, boost::shared_ptr<Node> > nodes_;
 };//~Model
