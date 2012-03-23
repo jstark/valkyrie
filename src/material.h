@@ -9,7 +9,7 @@ namespace valkyrie
 class Material
 {
 public:
-    explicit Material(int id, const std::string& name, double E = 2.1e11, double rho = 7800.0);
+    Material(int id, const std::string& name, double E = 2.1e11, double rho = 7800.0);
 
     const std::string get_name() const;
     const double get_E() const;
