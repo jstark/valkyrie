@@ -4,11 +4,11 @@
 /* VK HEADERS */
 #include "version.h"
 #include "node.h"
+#include "model.h"
 
 
 using namespace boost::python;
-using valkyrie::Version;
-using valkyrie::Node;
+using namespace valkyrie;
 
 BOOST_PYTHON_MODULE (pyvalkyrie)
 {
@@ -32,6 +32,13 @@ BOOST_PYTHON_MODULE (pyvalkyrie)
             .add_property("x" , &Node::get_x)
             .add_property("y" , &Node::get_y)
             .add_property("z" , &Node::get_z)
+    ;
+
+     // model
+    class_<Model>("Model", init<const std::string&>())
+            .add_property("name", &Model::get_name)
+            .def("__str__", &Model::get_name)
+            .def("add_node", &Model::addNode)
     ;
 }
 
