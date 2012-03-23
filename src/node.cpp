@@ -7,22 +7,22 @@ Node::Node(int id, double x, double y, double z)
 {
 }
 
-int valkyrie::Node::get_id() const
+const int valkyrie::Node::get_id() const
 {
     return id_;
 }
 
-double Node::get_x() const
+const double Node::get_x() const
 {
     return x_;
 }
 
-double Node::get_y() const
+const double Node::get_y() const
 {
     return y_;
 }
 
-double Node::get_z() const
+const double Node::get_z() const
 {
     return z_;
 }

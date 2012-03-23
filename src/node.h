@@ -9,10 +9,10 @@ class Node
 public:
     Node(int id, double x, double y, double z = 0.0);
 
-    int get_id() const;
-    double get_x() const;
-    double get_y() const;
-    double get_z() const;
+    const int get_id() const;
+    const double get_x() const;
+    const double get_y() const;
+    const double get_z() const;
 
 private:
     int id_;
