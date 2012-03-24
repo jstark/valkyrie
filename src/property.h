@@ -1,22 +1,21 @@
 #ifndef VALKYRIE_PROPERTY_H_INCLUDED
 #define VALKYRIE_PROPERTY_H_INCLUDED
 
+#include "entity.h"
 #include <string>
 
 namespace valkyrie
 {
 
-class Property
+class Property : private Entity
 {
 public:
     Property(int id, const std::string &name, double A);
 
-    const int get_id() const;
-    const std::string get_name() const;
+    IS_ENTITY
+
     const double get_A() const;
 private:
-    int id_;
-    const std::string name_;
     double A_;
 };//~cl:Property
 
