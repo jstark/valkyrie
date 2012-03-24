@@ -1,6 +1,7 @@
 #include "model.h"
 #include "node.h"
 
+using valkyrie::Entity;
 using valkyrie::Model;
 using valkyrie::Node;
 
