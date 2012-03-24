@@ -18,7 +18,8 @@ set (HEADERS
     ${CMAKE_SOURCE_DIR}/src/node.h
     ${CMAKE_SOURCE_DIR}/src/model.h
     ${CMAKE_SOURCE_DIR}/src/material.h
-    ${CMAKE_SOURCE_DIR}/src/property.h)
+    ${CMAKE_SOURCE_DIR}/src/property.h
+    ${CMAKE_SOURCE_DIR}/src/entity.h)
 
 set (SOURCES
     ${CMAKE_SOURCE_DIR}/src/version.cpp
