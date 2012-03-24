@@ -3,14 +3,17 @@
 
 #include <string>
 #include <map>
+
 #include <boost/shared_ptr.hpp>
 
 namespace valkyrie
 {
 
-#define kTransactionOK              1 << 0
-#define kTransactionFailed          1 << 1
-#define kTransactionIdAlreadyExists 1 << 2
+using boost::shared_ptr;
+
+#define kActionOK                   1 << 0
+#define kActionFailed               1 << 1
+#define kActionErrorIdAlreadyExists 1 << 2
 
 class Entity
 {
@@ -34,23 +37,24 @@ class EntityDb
 {
 public:
     typedef TEntity entity_type;
-    int add(boost::shared_ptr<TEntity> ref);
+    typedef std::map<int, shared_ptr<TEntity> > db_type;
 
+    int add(boost::shared_ptr<TEntity> ref);
 private:
-    std::map<int, boost::shared_ptr<TEntity> > db_;
+    db_type db_;
 };
 
 template<typename TEntity>
-int EntityDb<TEntity>::add(boost::shared_ptr<TEntity> ref)
+int EntityDb<TEntity>::add(shared_ptr<TEntity> ref)
 {
     int id = ref->get_id(); // must have this property
     if (db_.find(id) == db_.end())
     {
-        return kTransactionFailed | kTransactionIdAlreadyExists;
+        return kActionFailed | kActionErrorIdAlreadyExists;
     } else
     {
         db_.insert(std::make_pair(id, ref));
-        return kTransactionOK;
+        return kActionOK;
     }
 }
 
