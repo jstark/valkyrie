@@ -48,7 +48,7 @@ template<typename TEntity>
 int EntityDb<TEntity>::add(shared_ptr<TEntity> ref)
 {
     int id = ref->get_id(); // must have this property
-    if (db_.find(id) == db_.end())
+    if (db_.find(id) != db_.end())
     {
         return kActionFailed | kActionErrorIdAlreadyExists;
     } else
