@@ -25,6 +25,10 @@ private:
     std::string name_;
 };
 
+#define IS_ENTITY \
+    using Entity::get_id; \
+    using Entity::get_name;
+
 template<typename TEntity>
 class EntityDb
 {
