@@ -1,6 +1,8 @@
 #ifndef VALKYRIE_H_INCLUDED
 #define VALKYRIE_H_INCLUDED
 
+#include <stdio.h>
+
 /* From API C++ */
 #if defined _WIN32 || defined __CYGWIN__
     #ifdef revolution_EXPORTS // define this when generating DLL
@@ -42,6 +44,13 @@ DLL_PUBLIC extern int VKApiMinorVersion(void);
 DLL_PUBLIC extern int VKApiPatchVersion(void);
 DLL_PUBLIC extern int VKApiVersionIsAtLeast(int major, int minor, int patch);
 DLL_PUBLIC extern const char *VKApiVersion(void);
+
+/* model related functions */
+struct VKModel;
+
+DLL_PUBLIC extern struct VKModel* VKModelCreate(int id, const char *name = NULL);
+DLL_PUBLIC extern int VKModelCreateNode(struct VKModel *model, int nid, double x, double y, double z);
+DLL_PUBLIC extern int VKModelDestroy(struct VKModel* model);
 
 #ifdef __cplusplus
 }

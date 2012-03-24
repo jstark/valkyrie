@@ -14,6 +14,7 @@ using boost::shared_ptr;
 #define kActionOK                   1 << 0
 #define kActionFailed               1 << 1
 #define kActionErrorIdAlreadyExists 1 << 2
+#define kActionErrorIdDoesNotExist  1 << 3
 
 class Entity
 {
@@ -40,6 +41,8 @@ public:
     typedef std::map<int, shared_ptr<TEntity> > db_type;
 
     int add(boost::shared_ptr<TEntity> ref);
+    shared_ptr<TEntity> find(int id) const;
+    int remove(int id);
 private:
     db_type db_;
 };
@@ -56,6 +59,28 @@ int EntityDb<TEntity>::add(shared_ptr<TEntity> ref)
         db_.insert(std::make_pair(id, ref));
         return kActionOK;
     }
+}
+
+template<typename TEntity>
+shared_ptr<TEntity> EntityDb<TEntity>::find(int id) const
+{
+    typename db_type::const_iterator i = db_.find(id);
+    if (i == db_.end())
+    {
+        return shared_ptr<TEntity>((TEntity *)0);
+    }
+    return i->second;
+}
+
+template<typename TEntity>
+int EntityDb<TEntity>::remove(int id)
+{
+    int flag = db_.erase(id);
+    if (!flag)
+    {
+        return kActionFailed | kActionErrorIdDoesNotExist;
+    }
+    return kActionOK;
 }
 
 }//~ valkyrie
