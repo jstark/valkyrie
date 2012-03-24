@@ -6,7 +6,7 @@ project (valkyrie)
 set (Boost_USE_STATIC_LIBS ON)
 set (Boost_USE_MULTITHREADED ON)
 set (Boost_USE_STATIC_RUNTIME ON)
-find_package(Boost 1.49.0 COMPONENTS python REQUIRED)
+find_package(Boost 1.49.0)
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     link_directories (${Boost_LIBRARY_DIRS})
@@ -30,9 +30,6 @@ set (SOURCES
 
 #library sources
 add_subdirectory (src)
-
-#python modules
-add_subdirectory (python)
 
 #lua modules
 add_subdirectory (lua)
