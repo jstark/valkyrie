@@ -20,6 +20,8 @@ class DLL_PUBLIC Model : private Entity
 public:
     Model(int id, const std::string& name);
 
+    IS_ENTITY
+
     bool addNode(boost::shared_ptr<Node> node);
 private:
     std::map<int, boost::shared_ptr<Node> > nodes_;
