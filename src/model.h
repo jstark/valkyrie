@@ -5,10 +5,6 @@
 #include "entity.h"
 
 #include <string>
-#include <map>
-#include <iostream>
-
-#include <boost/shared_ptr.hpp>
 
 namespace valkyrie
 {
@@ -22,9 +18,9 @@ public:
 
     IS_ENTITY
 
-    bool addNode(boost::shared_ptr<Node> node);
+    int createNode(int id, double x, double y, double z = 0.0);
 private:
-    std::map<int, boost::shared_ptr<Node> > nodes_;
+    EntityDb<Node> nodes_;
 };//~Model
 
 }//~ns:valkyrie
