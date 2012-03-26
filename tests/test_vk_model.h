@@ -22,6 +22,29 @@ TEST (Model, createNode)
     ASSERT_EQ(flag, kActionFailed | kActionErrorIdAlreadyExists) << "created node with existing id !";
 }
 
+TEST (Model, createMaterial)
+{
+    valkyrie::Model model(5, "a model");
+    int flag = model.createMaterial(1);
+    ASSERT_EQ(flag, kActionOK) << "could not create a material !";
+
+    flag = model.createMaterial(2);
+    ASSERT_EQ(flag, kActionOK) << "could not create a material !";
+
+    flag = model.createMaterial(2);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorIdAlreadyExists) << "Two (or more) materials have the same id !";
+}
+
+TEST (Model, createInvalidMaterial)
+{
+    valkyrie::Model model(5, "a model");
+    int flag = model.createMaterial(1, -4);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create material with E = -4 !";
+
+    flag = model.createMaterial(1, 2.1e11, 0);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create material with rho = 0 !";
+}
+
 } //~ ns:
 
 #endif // VALKYRIE_TEST_VK_MODEL_H_INCLUDED
