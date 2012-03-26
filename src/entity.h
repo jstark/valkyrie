@@ -15,6 +15,7 @@ namespace valkyrie
 #define kActionFailed               1 << 1
 #define kActionErrorIdAlreadyExists 1 << 2
 #define kActionErrorIdDoesNotExist  1 << 3
+#define kActionErrorInvalidArgs     1 << 4
 
 class Entity
 {
