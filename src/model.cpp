@@ -1,6 +1,7 @@
 #include "model.h"
 #include "node.h"
 #include "material.h"
+#include "property.h"
 
 #include <iostream>
 #include <boost/shared_ptr.hpp>
@@ -9,6 +10,7 @@ using valkyrie::Entity;
 using valkyrie::Model;
 using valkyrie::Node;
 using valkyrie::Material;
+using valkyrie::Property;
 
 using boost::shared_ptr;
 
@@ -50,7 +52,17 @@ shared_ptr<Material> try_create_material(int mid, double E, double rho, const st
     return make_shared(m);
 }
 
+shared_ptr<Property> try_create_property(int pid, shared_ptr<Material> m, double A, const std::string& name)
+{
+    Property *p = 0;
+    if (A > 0 && m)
+    {
+        p = new Property(pid, name, m, A);
+    }
+    return make_shared(p);
 }
+
+}//~ns:
 
 int Model::createMaterial(int mid, double E, double rho, const std::string &name)
 {
@@ -62,9 +74,15 @@ int Model::createMaterial(int mid, double E, double rho, const std::string &name
     return kActionFailed | kActionErrorInvalidArgs;
 }
 
-int Model::createProperty(int pid, int mid, double A)
+int Model::createProperty(int pid, int mid, double A, const std::string &name)
 {
-
+    shared_ptr<Material> m = materials_.find(mid);
+    shared_ptr<Property> p = try_create_property(pid, m, A, name);
+    if (p)
+    {
+        return properties_.add(p);
+    }
+    return kActionFailed | kActionErrorInvalidArgs;
 }
 
 int Model::createRod(int eid, int pid, int nid_i, int nid_j)

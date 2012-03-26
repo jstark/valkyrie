@@ -3,20 +3,27 @@
 
 #include "entity.h"
 #include <string>
+#include <boost/shared_ptr.hpp>
 
 namespace valkyrie
 {
 
+using boost::shared_ptr;
+
+class Material;
+
 class Property : private Entity
 {
 public:
-    Property(int id, const std::string &name, double A);
+    Property(int pid, const std::string &name, shared_ptr<Material> m, double A);
 
     IS_ENTITY
 
     const double get_A() const;
 private:
+    shared_ptr<Material> m_;
     double A_;
+
 };//~cl:Property
 
 }//~ns:valkyrie

@@ -2,8 +2,8 @@
 
 using valkyrie::Property;
 
-Property::Property(int id, const std::string &name, double A)
-    : Entity(id, name), A_(A) {}
+Property::Property(int pid, const std::string &name, shared_ptr<Material> m, double A)
+    : Entity(pid, name), m_(m), A_(A) {}
 
 const double Property::get_A() const
 {

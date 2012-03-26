@@ -24,7 +24,7 @@ public:
 
     int createNode(int nid, double x, double y, double z = 0.0);
     int createMaterial(int mid, double E = 2.1e11, double rho = 7800.0, const std::string& name = "");
-    int createProperty(int pid, int mid, double A);
+    int createProperty(int pid, int mid, double A, const std::string& name = "");
     int createRod(int eid, int pid, int nid_i, int nid_j);
 private:
     EntityDb<Node> nodes_;
