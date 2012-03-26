@@ -9,7 +9,7 @@
 namespace valkyrie
 {
 
-using boost::shared_ptr;
+#define LOG_DESTRUCTORS
 
 #define kActionOK                   1 << 0
 #define kActionFailed               1 << 1
@@ -32,6 +32,8 @@ private:
 #define IS_ENTITY \
     using Entity::get_id; \
     using Entity::get_name;
+
+using boost::shared_ptr;
 
 template<typename TEntity>
 class EntityDb

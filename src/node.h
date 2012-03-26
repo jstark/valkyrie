@@ -10,6 +10,7 @@ class Node : private Entity
 {
 public:
     Node(int id, double x, double y, double z = 0.0);
+    ~Node();
 
     IS_ENTITY
 

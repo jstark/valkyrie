@@ -15,6 +15,7 @@ class DLL_PUBLIC Model : private Entity
 {
 public:
     Model(int id, const std::string& name);
+    ~Model();
 
     IS_ENTITY
 

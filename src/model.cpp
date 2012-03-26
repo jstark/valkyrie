@@ -1,6 +1,7 @@
 #include "model.h"
 #include "node.h"
 
+#include <iostream>
 #include <boost/shared_ptr.hpp>
 
 using valkyrie::Entity;
@@ -21,6 +22,13 @@ template<typename T> shared_ptr<T> make_shared(T* instance)
 
 Model::Model(int id, const std::string& name)
     : Entity(id, name) {}
+
+Model::~Model()
+{
+#ifdef LOG_DESTRUCTORS
+    std::cout << "[Log]>Model::~Model <" << this << ">" << std::endl;
+#endif
+}
 
 int Model::createNode(int id, double x, double y, double z)
 {
