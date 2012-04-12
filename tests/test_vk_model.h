@@ -110,6 +110,26 @@ TEST (Model, createInvalidRod)
 
 }
 
+TEST (Model, createSpc)
+{
+    valkyrie::Model model(5, "a model");
+
+    model.createNode(1, 0, 0);
+    int flag = model.createSpc(1, 123, 1);
+    ASSERT_EQ(flag, kActionOK) << "could not create a Spc constraint !";
+
+    flag = model.createSpc(1, 123, 1);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorIdAlreadyExists) << "Allowed to create Spc with duplicate id !";
+}
+
+TEST (Model, createInvalidSpc)
+{
+    valkyrie::Model model(5, "a model");
+
+    int flag = model.createSpc(1, 123, 57);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create rod with invalid node !";
+}
+
 } //~ ns:
 
 #endif // VALKYRIE_TEST_VK_MODEL_H_INCLUDED
