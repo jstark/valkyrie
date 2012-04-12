@@ -20,7 +20,8 @@ set (HEADERS
     ${CMAKE_SOURCE_DIR}/src/material.h
     ${CMAKE_SOURCE_DIR}/src/property.h
     ${CMAKE_SOURCE_DIR}/src/entity.h
-    ${CMAKE_SOURCE_DIR}/src/rod.h)
+    ${CMAKE_SOURCE_DIR}/src/rod.h
+    ${CMAKE_SOURCE_DIR}/src/spc.h)
 
 set (SOURCES
     ${CMAKE_SOURCE_DIR}/src/version.cpp
@@ -29,7 +30,8 @@ set (SOURCES
     ${CMAKE_SOURCE_DIR}/src/model.cpp
     ${CMAKE_SOURCE_DIR}/src/material.cpp
     ${CMAKE_SOURCE_DIR}/src/property.cpp
-    ${CMAKE_SOURCE_DIR}/src/rod.cpp)
+    ${CMAKE_SOURCE_DIR}/src/rod.cpp
+    ${CMAKE_SOURCE_DIR}/src/spc.cpp)
 
 #library sources
 add_subdirectory (src)
