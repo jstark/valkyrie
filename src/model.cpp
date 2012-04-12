@@ -2,6 +2,7 @@
 #include "node.h"
 #include "material.h"
 #include "property.h"
+#include "rod.h"
 
 #include <iostream>
 #include <boost/shared_ptr.hpp>
@@ -11,6 +12,7 @@ using valkyrie::Model;
 using valkyrie::Node;
 using valkyrie::Material;
 using valkyrie::Property;
+using valkyrie::Rod;
 
 using boost::shared_ptr;
 
@@ -62,6 +64,16 @@ shared_ptr<Property> try_create_property(int pid, shared_ptr<Material> m, double
     return make_shared(p);
 }
 
+shared_ptr<Rod> try_create_rod(int eid, shared_ptr<Property> p, shared_ptr<Node> n1, shared_ptr<Node> n2, const std::string& name)
+{
+    Rod *r = 0;
+    if (p && n1 && n2)
+    {
+        r = new Rod(eid, name, p, n1, n2);
+    }
+    return make_shared(r);
+}
+
 }//~ns:
 
 int Model::createMaterial(int mid, double E, double rho, const std::string &name)
@@ -87,5 +99,13 @@ int Model::createProperty(int pid, int mid, double A, const std::string &name)
 
 int Model::createRod(int eid, int pid, int nid_i, int nid_j)
 {
-
+    shared_ptr<Property> p = properties_.find(pid);
+    shared_ptr<Node> n1 = nodes_.find(nid_i);
+    shared_ptr<Node> n2 = nodes_.find(nid_j);
+    shared_ptr<Rod> rod = try_create_rod(eid, p, n1, n2, "");
+    if (rod)
+    {
+        return elements_.add(rod);
+    }
+    return kActionFailed | kActionErrorInvalidArgs;
 }
