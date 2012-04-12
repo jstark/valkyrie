@@ -71,6 +71,45 @@ TEST (Model, createInvalidProperty)
     ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create property with negative cross-section !";
 }
 
+TEST (Model, createRod)
+{
+    valkyrie::Model model(5, "a model");
+
+    model.createMaterial(2); // id = 2
+    model.createProperty(1, 2, 0.1, "steel");
+    model.createNode(1, 0, 0);
+    model.createNode(2, 1, 1);
+    int flag = model.createRod(1, 1, 1, 2);
+    ASSERT_EQ(flag, kActionOK) << "could not create a rod element !";
+}
+
+TEST (Model, createInvalidRod)
+{
+    valkyrie::Model model(5, "a model");
+
+    int flag = model.createRod(1, 1, 1, 2);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create rod with invalid property !";
+
+    model.createMaterial(2);
+    model.createProperty(1, 2, 0.1, "some property");
+    flag = model.createRod(1, 1, 17, 0);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create rod with invalid node !";
+
+    model.createNode(1, 0, 0);
+    flag = model.createRod(1, 1, 1, 35);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create rod with invalid node !";
+    flag = model.createRod(1, 1, 1, 1 );
+    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create rod on duplicate node !";
+
+    model.createNode(2, 1, 1);
+    flag = model.createRod(1, 1, 1, 2);
+    ASSERT_EQ(flag, kActionOK) << "could not create a rod element !";
+
+    flag = model.createRod(1, 1, 1, 2);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorIdAlreadyExists) << "Allowed to create rod with duplicate id !";
+
+}
+
 } //~ ns:
 
 #endif // VALKYRIE_TEST_VK_MODEL_H_INCLUDED

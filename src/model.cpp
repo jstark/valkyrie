@@ -67,7 +67,7 @@ shared_ptr<Property> try_create_property(int pid, shared_ptr<Material> m, double
 shared_ptr<Rod> try_create_rod(int eid, shared_ptr<Property> p, shared_ptr<Node> n1, shared_ptr<Node> n2, const std::string& name)
 {
     Rod *r = 0;
-    if (p && n1 && n2)
+    if (p && n1 && n2 && (n1 != n2))
     {
         r = new Rod(eid, name, p, n1, n2);
     }
