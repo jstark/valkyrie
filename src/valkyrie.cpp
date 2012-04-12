@@ -10,64 +10,28 @@ using valkyrie::Model;
 using std::map;
 using boost::shared_ptr;
 
-struct VKModel { int id; };
-
-struct VKModel *VKModelAlloc()
-{
-    return static_cast<struct VKModel *>(calloc(1, sizeof(VKModel)));
-}
-
-struct VKModel *VKModelInit(struct VKModel *model, int id)
-{
-    model->id = id;
-    return model;
-}
-
-struct VKModel *VKModelDealloc(struct VKModel *model)
-{
-    free(model);
-    return NULL;
-}
-
 namespace
 {
     EntityDb<Model> models;
 }
 
-extern "C" struct VKModel* VKModelCreate(int id, const char *name)
+extern "C" int VKModelCreate(int mid, const char *name)
 {
-    if (models.find(id))
+    if (models.find(mid))
     {
-        return NULL;
+        return kActionFailed | kActionErrorIdAlreadyExists;
     }
 
-    struct VKModel *proxy = VKModelAlloc();
-    proxy = VKModelInit(proxy, id);
-    models.add(shared_ptr<Model>(new Model(id, std::string(name ? name : ""))));
-    return proxy;
+    models.add(shared_ptr<Model>(new Model(mid, std::string(name ? name : ""))));
+    return kActionOK;
 }
 
-extern "C" int VKModelCreateNode(struct VKModel *model, int nid, double x, double y, double z)
+extern "C" int VKModelCreateNode(int mid, int nid, double x, double y, double z)
 {
-    if (model)
+    shared_ptr<Model> realModel = models.find(mid);
+    if (realModel)
     {
-        int id = model->id;
-        shared_ptr<Model> realModel = models.find(id);
-        if (realModel)
-        {
-            return realModel->createNode(nid, x, y, z);
-        }
+        return realModel->createNode(nid, x, y, z);
     }
-    return kActionFailed;
-}
-
-extern "C" int VKModelDestroy(struct VKModel* model)
-{
-    if (model)
-    {
-        int id = model->id;
-        VKModelDealloc(model);
-        return models.remove(id);
-    }
-    return kActionFailed;
+    return kActionFailed | kActionErrorIdDoesNotExist;
 }
