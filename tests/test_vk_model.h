@@ -127,7 +127,31 @@ TEST (Model, createInvalidSpc)
     valkyrie::Model model(5, "a model");
 
     int flag = model.createSpc(1, 123, 57);
-    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create rod with invalid node !";
+    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create Spc with invalid node !";
+}
+
+TEST (Model, createForce)
+{
+    valkyrie::Model model(5, "a model");
+
+    model.createNode(1, 0, 0);
+    int flag = model.createForce(1, 1, 100.0, 1.0, 0.0, 0.0);
+    ASSERT_EQ(flag, kActionOK) << "could not create a Force load !";
+
+    flag = model.createForce(1, 1, 100.0, 1.0, 0.0, 0.0);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorIdAlreadyExists) << "Allowed to create Force with duplicate id !";
+}
+
+TEST (Model, createInvalidForce)
+{
+    valkyrie::Model model(5, "a model");
+
+    int flag = model.createForce(1, 1, 100.0, 0.0, 0.0, 0.0);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create Force with invalid node !";
+
+    model.createNode(1, 0, 0);
+    flag = model.createForce(1, 1, 100.0, 0.0, 0.0, 0.0);
+    ASSERT_EQ(flag, kActionFailed | kActionErrorInvalidArgs) << "Allowed to create Force with invalid unit vector !";
 }
 
 } //~ ns:
