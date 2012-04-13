@@ -5,10 +5,10 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+using boost::shared_ptr;
+
 namespace valkyrie
 {
-
-using boost::shared_ptr;
 
 class Property;
 class Node;
@@ -20,6 +20,9 @@ public:
 
     IS_ENTITY
 
+    shared_ptr<Property> property();
+    shared_ptr<Node> node_1();
+    shared_ptr<Node> node_2();
 private:
     shared_ptr<Property> p_;
     shared_ptr<Node> n1_;

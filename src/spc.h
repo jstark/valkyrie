@@ -5,10 +5,10 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+using boost::shared_ptr;
+
 namespace valkyrie
 {
-
-using boost::shared_ptr;
 
 class Node;
 
@@ -22,6 +22,8 @@ public:
     Spc(int id, const std::string& name, int dofs, shared_ptr<Node> n);
 
     IS_ENTITY
+
+    shared_ptr<Node> node();
 private:
     shared_ptr<Node> n_;
     int dofs_;
