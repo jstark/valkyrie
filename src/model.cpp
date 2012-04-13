@@ -4,8 +4,10 @@
 #include "property.h"
 #include "rod.h"
 #include "spc.h"
+#include "force.h"
 
 #include <iostream>
+#include <cmath>
 #include <boost/shared_ptr.hpp>
 
 using valkyrie::Entity;
@@ -15,6 +17,7 @@ using valkyrie::Material;
 using valkyrie::Property;
 using valkyrie::Rod;
 using valkyrie::Spc;
+using valkyrie::Force;
 
 using boost::shared_ptr;
 
@@ -86,6 +89,34 @@ shared_ptr<Spc> try_create_spc(int sid, int dofs, shared_ptr<Node> n)
     return make_shared(s);
 }
 
+int unit_vector(double x, double y, double z, double *nx, double *ny, double *nz)
+{
+    int ret = 0;
+
+    double len = std::sqrt(x*x + y*y + z*z);
+
+    if (len < 1.0e-6)
+    {
+        return 1; // error
+    }
+
+    *nx = x/len;
+    *ny = y/len;
+    *nz = z/len;
+
+    return ret;
+}
+
+shared_ptr<Force> try_create_force(int fid, shared_ptr<Node> n, double magn, double nx, double ny, double nz)
+{
+    Force *f = 0;
+    if (n && !unit_vector(nx, ny, nz, &nx, &ny, &nz))
+    {
+        f = new Force(fid, "", n, magn, nx, ny, nz);
+    }
+    return make_shared(f);
+}
+
 }//~ns:
 
 int Model::createMaterial(int mid, double E, double rho, const std::string &name)
@@ -129,6 +160,17 @@ int Model::createSpc(int sid, int dof, int nid)
     if (s)
     {
         return constraints_.add(s);
+    }
+    return kActionFailed | kActionErrorInvalidArgs;
+}
+
+int Model::createForce(int fid, int nid, double magn, double nx, double ny, double nz)
+{
+    shared_ptr<Node> n = nodes_.find(nid);
+    shared_ptr<Force> f= try_create_force(fid, n, magn, nx, ny, nz);
+    if (f)
+    {
+        return loads_.add(f);
     }
     return kActionFailed | kActionErrorInvalidArgs;
 }

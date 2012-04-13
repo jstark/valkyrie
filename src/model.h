@@ -14,6 +14,7 @@ class Material;
 class Property;
 class Rod;
 class Spc;
+class Force;
 
 class DLL_PUBLIC Model : private Entity
 {
@@ -28,12 +29,14 @@ public:
     int createProperty(int pid, int mid, double A, const std::string& name = "");
     int createRod(int eid, int pid, int nid_i, int nid_j);
     int createSpc(int sid, int dofs, int nid);
+    int createForce(int fid, int nid, double magn, double nx, double ny, double nz);
 private:
     EntityDb<Node> nodes_;
     EntityDb<Material> materials_;
     EntityDb<Property> properties_;
     EntityDb<Rod> elements_;
     EntityDb<Spc> constraints_;
+    EntityDb<Force> loads_;
 };//~Model
 
 }//~ns:valkyrie
