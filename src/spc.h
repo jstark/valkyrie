@@ -23,7 +23,7 @@ public:
 
     IS_ENTITY
 
-    shared_ptr<Node> node();
+    shared_ptr<Node> node() { return n_; }
 private:
     shared_ptr<Node> n_;
     int dofs_;

@@ -20,9 +20,9 @@ public:
 
     IS_ENTITY
 
-    shared_ptr<Property> property();
-    shared_ptr<Node> node_1();
-    shared_ptr<Node> node_2();
+    shared_ptr<Property> property() { return p_; }
+    shared_ptr<Node> node_1() { return n1_; }
+    shared_ptr<Node> node_2() { return n2_; }
 private:
     shared_ptr<Property> p_;
     shared_ptr<Node> n1_;

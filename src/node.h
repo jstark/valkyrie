@@ -14,9 +14,9 @@ public:
 
     IS_ENTITY
 
-    const double get_x() const;
-    const double get_y() const;
-    const double get_z() const;
+    const double get_x() const { return x_; }
+    const double get_y() const { return y_; }
+    const double get_z() const { return z_; }
 
 private:
     double x_;

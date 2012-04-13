@@ -14,8 +14,8 @@ public:
 
     IS_ENTITY
 
-    const double get_E() const;
-    const double get_rho() const;
+    const double get_E() const { return E_; }
+    const double get_rho() const { return rho_; }
 private:
     double E_;
     double rho_;

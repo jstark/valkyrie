@@ -19,7 +19,7 @@ public:
 
     IS_ENTITY
 
-    const double get_A() const;
+    const double get_A() const { return A_; }
 private:
     shared_ptr<Material> m_;
     double A_;
