@@ -3,6 +3,9 @@
 
 #include "entity.h"
 #include <string>
+#include <boost/shared_ptr.hpp>
+
+using boost::shared_ptr;
 
 namespace valkyrie
 {
@@ -20,6 +23,8 @@ private:
     double E_;
     double rho_;
 };//~cl:Material
+
+shared_ptr<Material> try_create_material(int mid, double E, double rho, const std::string& name);
 
 }//~ns:valkyrie
 

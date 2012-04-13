@@ -29,6 +29,8 @@ private:
     shared_ptr<Node> n2_;
 };//~ cl:Rod
 
+shared_ptr<Rod> try_create_rod(int eid, shared_ptr<Property> p, shared_ptr<Node> n1, shared_ptr<Node> n2, const std::string& name);
+
 }//~ns:valkyrie
 
 #endif // VALKYRIE_ROD_H_INCLUDED

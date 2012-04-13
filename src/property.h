@@ -5,10 +5,10 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+using boost::shared_ptr;
+
 namespace valkyrie
 {
-
-using boost::shared_ptr;
 
 class Material;
 
@@ -25,6 +25,8 @@ private:
     double A_;
 
 };//~cl:Property
+
+shared_ptr<Property> try_create_property(int pid, shared_ptr<Material> m, double A, const std::string& name);
 
 }//~ns:valkyrie
 

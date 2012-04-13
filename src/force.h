@@ -5,10 +5,10 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+using boost::shared_ptr;
+
 namespace valkyrie
 {
-
-using boost::shared_ptr;
 
 class Node;
 
@@ -29,6 +29,8 @@ private:
     double magnitude_;
     double nx_, ny_, nz_;
 };
+
+shared_ptr<Force> try_create_force(int fid, shared_ptr<Node> n, double magn, double nx, double ny, double nz);
 
 }//~ns:valkyrie
 

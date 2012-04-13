@@ -29,6 +29,8 @@ private:
     int dofs_;
 };//~ cl:Spc
 
+shared_ptr<Spc> try_create_spc(int sid, int dofs, shared_ptr<Node> n);
+
 }//~ ns:valkyrie
 
 #endif // VALKYRIE_SPC_H_INCLUDED
