@@ -4,6 +4,7 @@
 #include "test_vk_version.h"
 #include "test_vk_entity.h"
 #include "test_vk_model.h"
+#include "test_vk_node.h"
 
 int main(int argc, char *argv[])
 {
