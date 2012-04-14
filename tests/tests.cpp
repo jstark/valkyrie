@@ -7,6 +7,9 @@
 #include "test_vk_node.h"
 #include "test_vk_force.h"
 #include "test_vk_material.h"
+#include "test_vk_property.h"
+#include "test_vk_spc.h"
+#include "test_vk_rod.h"
 
 int main(int argc, char *argv[])
 {

@@ -12,9 +12,9 @@ namespace valkyrie
 
 class Node;
 
-#define kTranslateXDof  1 << 0
-#define kTranslateYDof  2 << 0
-#define kTranslateZDof  3 << 0
+#define kTranslateXDof  1
+#define kTranslateYDof  2
+#define kTranslateZDof  4
 
 class Spc : private Entity
 {
@@ -23,7 +23,8 @@ public:
 
     IS_ENTITY
 
-    shared_ptr<Node> node() { return n_; }
+    shared_ptr<Node> get_node() { return n_; }
+    bool is_constrained_at(int dof) { return dofs_ & dof; }
 private:
     shared_ptr<Node> n_;
     int dofs_;
