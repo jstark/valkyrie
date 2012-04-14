@@ -1,6 +1,7 @@
 #ifndef VALKYRIE_FORCE_H_INCLUDED
 #define VALKYRIE_FORCE_H_INCLUDED
 
+#include "valkyrie.h"
 #include "entity.h"
 #include <string>
 #include <boost/shared_ptr.hpp>
@@ -12,7 +13,7 @@ namespace valkyrie
 
 class Node;
 
-class Force : private Entity
+class DLL_HIDDEN Force : private Entity
 {
 public:
     Force(int id, const std::string& name, shared_ptr<Node> n, double magn, double nx, double ny, double nz);
@@ -30,7 +31,7 @@ private:
     double nx_, ny_, nz_;
 };
 
-shared_ptr<Force> try_create_force(int fid, shared_ptr<Node> n, double magn, double nx, double ny, double nz);
+shared_ptr<Force> DLL_HIDDEN try_create_force(int fid, shared_ptr<Node> n, double magn, double nx, double ny, double nz);
 
 }//~ns:valkyrie
 

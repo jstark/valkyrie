@@ -1,12 +1,13 @@
 #ifndef VALKYRIE_NODE_H_INCLUDED
 #define VALKYRIE_NODE_H_INCLUDED
 
+#include "valkyrie.h"
 #include "entity.h"
 
 namespace valkyrie
 {
 
-class Node : private Entity
+class DLL_HIDDEN Node : private Entity
 {
 public:
     Node(int id, double x, double y, double z = 0.0);

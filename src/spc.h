@@ -1,6 +1,7 @@
 #ifndef VALKYRIE_SPC_H_INCLUDED
 #define VALKYRIE_SPC_H_INCLUDED
 
+#include "valkyrie.h"
 #include "entity.h"
 #include <string>
 #include <boost/shared_ptr.hpp>
@@ -16,7 +17,7 @@ class Node;
 #define kTranslateYDof  2
 #define kTranslateZDof  4
 
-class Spc : private Entity
+class DLL_HIDDEN Spc : private Entity
 {
 public:
     Spc(int id, const std::string& name, int dofs, shared_ptr<Node> n);
@@ -30,7 +31,7 @@ private:
     int dofs_;
 };//~ cl:Spc
 
-shared_ptr<Spc> try_create_spc(int sid, int dofs, shared_ptr<Node> n);
+shared_ptr<Spc> DLL_HIDDEN try_create_spc(int sid, int dofs, shared_ptr<Node> n);
 
 }//~ ns:valkyrie
 

@@ -1,6 +1,7 @@
 #ifndef VALKYRIE_MATERIAL_H_INCLUDED
 #define VALKYRIE_MATERIAL_H_INCLUDED
 
+#include "valkyrie.h"
 #include "entity.h"
 #include <string>
 #include <boost/shared_ptr.hpp>
@@ -10,7 +11,7 @@ using boost::shared_ptr;
 namespace valkyrie
 {
 
-class Material : private Entity
+class DLL_HIDDEN Material : private Entity
 {
 public:
     Material(int id, const std::string& name, double E = 2.1e11, double rho = 7800.0);
@@ -24,7 +25,7 @@ private:
     double rho_;
 };//~cl:Material
 
-shared_ptr<Material> try_create_material(int mid, double E, double rho, const std::string& name);
+shared_ptr<Material> DLL_HIDDEN try_create_material(int mid, double E, double rho, const std::string& name);
 
 }//~ns:valkyrie
 
