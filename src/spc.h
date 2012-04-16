@@ -25,7 +25,7 @@ public:
     IS_ENTITY
 
     shared_ptr<Node> get_node() { return n_; }
-    bool is_constrained_at(int dof) { return dofs_ & dof; }
+    const bool is_constrained_at(int dof) { return dofs_ & dof; }
 private:
     shared_ptr<Node> n_;
     int dofs_;

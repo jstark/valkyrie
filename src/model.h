@@ -16,7 +16,7 @@ class Rod;
 class Spc;
 class Force;
 
-class DLL_PUBLIC Model : private Entity
+class DLL_HIDDEN Model : private Entity
 {
 public:
     Model(int id, const std::string& name);
