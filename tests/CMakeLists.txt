@@ -9,7 +9,8 @@ set (TEST_HEADERS
         test_vk_material.h
         test_vk_property.h
         test_vk_spc.h
-        test_vk_rod.h)
+        test_vk_rod.h
+        test_vk_staticanalysis.h)
 set (TEST_SOURCES tests.cpp)
 
 add_executable (exec_tests ${SOURCES} ${TEST_HEADERS} ${TEST_SOURCES})

@@ -18,7 +18,7 @@ TEST (Force, testProperties)
 {
     shared_ptr<Node> n = valkyrie::make_shared(new Node(1, 0, 0));
     Force f(10, "", n, 10.2, 0.0, 1.0, 0.0);
-    ASSERT_EQ(n, f.node());
+    ASSERT_EQ(n, f.get_node());
     ASSERT_DOUBLE_EQ(f.magnitude(), 10.2);
     ASSERT_DOUBLE_EQ(f.nx(), 0.0);
     ASSERT_DOUBLE_EQ(f.ny(), 1.0);

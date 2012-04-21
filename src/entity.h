@@ -41,11 +41,18 @@ class EntityDb
 {
 public:
     typedef TEntity entity_type;
-    typedef std::map<int, shared_ptr<TEntity> > db_type;
+    typedef int id_type;
+    typedef std::map<id_type, shared_ptr<TEntity> > db_type;
+    typedef typename db_type::size_type size_type;
+    typedef typename db_type::const_iterator const_iterator;
+
 
     int add(boost::shared_ptr<TEntity> ref);
     shared_ptr<TEntity> find(int id) const;
     int remove(int id);
+    size_type size() const { return db_.size(); }
+    const_iterator begin() const { return db_.begin(); }
+    const_iterator end() const { return db_.end(); }
 private:
     db_type db_;
 };

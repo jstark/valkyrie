@@ -10,6 +10,7 @@
 #include "test_vk_property.h"
 #include "test_vk_spc.h"
 #include "test_vk_rod.h"
+#include "test_vk_staticanalysis.h"
 
 int main(int argc, char *argv[])
 {

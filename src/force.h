@@ -20,7 +20,7 @@ public:
 
     IS_ENTITY
 
-    shared_ptr<Node> node() { return n_; }
+    shared_ptr<Node> get_node() { return n_; }
     const double magnitude() const { return magnitude_; }
     const double nx() const { return nx_; }
     const double ny() const { return ny_; }

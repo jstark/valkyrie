@@ -25,9 +25,6 @@ Model::Model(int id, const std::string& name)
 
 Model::~Model()
 {
-#ifdef LOG_DESTRUCTORS
-    std::cout << "[Log]>Model::~Model <" << this << ">" << std::endl;
-#endif
 }
 
 int Model::createNode(int id, double x, double y, double z)

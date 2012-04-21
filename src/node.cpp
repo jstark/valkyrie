@@ -9,7 +9,4 @@ Node::Node(int id, double x, double y, double z)
 
 Node::~Node()
 {
-#ifdef LOG_DESTRUCTORS
-    std::cout << "[Log]>Node::~Node <" << this << ">" << std::endl;
-#endif
 }
