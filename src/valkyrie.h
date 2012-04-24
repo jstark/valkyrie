@@ -5,7 +5,7 @@
 
 /* From API C++ */
 #if defined _WIN32 || defined __CYGWIN__
-    #ifdef revolution_EXPORTS // define this when generating DLL
+    #ifdef valkyrie_EXPORTS // define this when generating DLL
         #ifdef __GNUC__
             #define DLL_PUBLIC __attribute__((dllexport))
         #else
@@ -39,11 +39,11 @@ extern "C" {
 #define VK_API_VERSION "0.1.0"
 
 /* version related functions */
-DLL_PUBLIC extern int VKApiMajorVersion(void);
-DLL_PUBLIC extern int VKApiMinorVersion(void);
-DLL_PUBLIC extern int VKApiPatchVersion(void);
-DLL_PUBLIC extern int VKApiVersionIsAtLeast(int major, int minor, int patch);
-DLL_PUBLIC extern const char *VKApiVersion(void);
+extern DLL_PUBLIC int VKApiMajorVersion(void);
+extern DLL_PUBLIC int VKApiMinorVersion(void);
+extern DLL_PUBLIC int VKApiPatchVersion(void);
+extern DLL_PUBLIC int VKApiVersionIsAtLeast(int major, int minor, int patch);
+extern DLL_PUBLIC const char *VKApiVersion(void);
 
 #ifdef __cplusplus
 }

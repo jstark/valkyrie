@@ -30,7 +30,7 @@ private:
     shared_ptr<Node> n2_;
 };//~ cl:Rod
 
-shared_ptr<Rod> DLL_PUBLIC try_create_rod(int eid, shared_ptr<Property> p, shared_ptr<Node> n1, shared_ptr<Node> n2, const std::string& name);
+shared_ptr<Rod> DLL_HIDDEN try_create_rod(int eid, shared_ptr<Property> p, shared_ptr<Node> n1, shared_ptr<Node> n2, const std::string& name);
 
 }//~ns:valkyrie
 
