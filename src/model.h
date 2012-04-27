@@ -24,6 +24,10 @@ public:
 
     IS_ENTITY
 
+    typedef EntityDb<Node>::const_iterator const_node_iterator;
+    const_node_iterator beginNodes() const { return nodes_.begin(); }
+    const_node_iterator endNodes() const { return nodes_.end(); }
+
     int createNode(int nid, double x, double y, double z = 0.0);
     int createMaterial(int mid, double E = 2.1e11, double rho = 7800.0, const std::string& name = "");
     int createProperty(int pid, int mid, double A, const std::string& name = "");
