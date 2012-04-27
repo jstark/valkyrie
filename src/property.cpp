@@ -1,6 +1,8 @@
 #include "property.h"
+#include "material.h"
 
 using valkyrie::Property;
+using valkyrie::Material;
 
 Property::Property(int pid, const std::string &name, shared_ptr<Material> m, double A)
     : Entity(pid, name), m_(m), A_(A) {}

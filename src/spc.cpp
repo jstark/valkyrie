@@ -1,6 +1,8 @@
 #include "spc.h"
+#include "node.h"
 
 using valkyrie::Spc;
+using valkyrie::Node;
 
 Spc::Spc(int id, const std::string &name, int dofs, shared_ptr<Node> n)
     : Entity(id, name), n_(n), dofs_(dofs)
