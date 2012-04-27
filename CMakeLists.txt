@@ -37,6 +37,9 @@ set (SOURCES
     ${CMAKE_SOURCE_DIR}/src/force.cpp
     ${CMAKE_SOURCE_DIR}/src/staticanalysis.cpp)
 
+#Eigen
+include_directories (${CMAKE_SOURCE_DIR}/include)
+
 #library sources
 add_subdirectory (src)
 
