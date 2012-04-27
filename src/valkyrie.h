@@ -33,10 +33,10 @@
 extern "C" {
 #endif
 
-#define VK_API_MAJOR 0
-#define VK_API_MINOR 1
+#define VK_API_MAJOR 1
+#define VK_API_MINOR 0
 #define VK_API_PATCH 0
-#define VK_API_VERSION "0.1.0"
+#define VK_API_VERSION "1.0.0"
 
 /* version related functions */
 DLL_PUBLIC extern int VKApiMajorVersion(void);
