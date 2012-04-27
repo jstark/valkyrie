@@ -40,7 +40,23 @@ TEST (StaticAnalysis, testStiffness)
     m.createForce(2, 5, 500, 0, -1, 0);
 
     StaticAnalysis analysis;
-    analysis.analyze(m);
+    StaticAnalysisResults results;
+    analysis.analyze(m, results);
+
+    printf("%8s\t%8s\t%8s\t%8s\t%8s\t%8s\t%8s\n", "Node ID", "UX", "UY", "UZ", "React X", "React Y", "React Z");
+    for (int i = 1; i < 6; ++i)
+    {
+        NodalResults nodal = results.nodalResults(i);
+        printf("% 8d\t% 8.3le\t% 8.3le\t% 8.3le\t% 8.3le\t% 8.3le\t% 8.3le\n",
+               i, nodal.ux, nodal.uy, nodal.uz, nodal.reactionX, nodal.reactionY, nodal.reactionZ);
+    }
+
+    printf("%8s\t%8s\t%8s\t%8s\n", "Elem ID", "Strain", "Stress", "Force");
+    for (int i = 1; i < 7; ++i)
+    {
+        ElementalResults elem = results.elementalResults(i);
+        printf("% 8d\t% 8.3le\t% 8.3le\t% 8.3le\n", i, elem.strain, elem.stress, elem.force);
+    }
 }
 
 }
