@@ -86,7 +86,7 @@ extern DLL_PUBLIC const char *VKApiVersion(void);
 * \return TODO
 * @see
 */
-extern int VKModelCreate(int mid, const char *name);
+extern DLL_PUBLIC int VKModelCreate(int mid, const char *name);
 
 /*! \fn void VKModelCreateNode(int mid, int nid, double x, double y, double z);
 * \brief Creates a new FE node.
@@ -96,9 +96,70 @@ extern int VKModelCreate(int mid, const char *name);
 * \param y the node's y coordinate.
 * \param z the node's z coordinate.
 * \return TODO
-* @see
+* @see TODO
 */
-extern int VKModelCreateNode(int mid, int nid, double x, double y, double z);
+extern DLL_PUBLIC int VKModelCreateNode(int mid, int nid, double x, double y, double z);
+
+/*! \fn void VKModelCreateMaterial(int modelid, int matid, double E, double rho, const char *name);
+* \brief Creates a new description for an elastic material.
+* \param modelid the model's id, a positive integer.
+* \param matid the material's id, a positive integer.
+* \param E the material's young modulus, a positive number.
+* \param rho the material's density, a positive number.
+* \param name the material's name, which can be NULL.
+* \return TODO
+* @see TODO
+*/
+extern DLL_PUBLIC int VKModelCreateMaterial(int modelid, int matid, double E, double rho, const char *name);
+
+/*! \fn void VKModelCreateProperty(int mid, int pid, int matid, double A, const char *name);
+* \brief Creates a new property description.
+* \param mid the model's id, a positive integer.
+* \param pid the property's id, a positive integer.
+* \param matid the property's material id, which must exist in model.
+* \param A the cross-section value, a positive number.
+* \param name the property's name.
+* \return TODO
+* @see TODO
+*/
+extern DLL_PUBLIC int VKModelCreateProperty(int mid, int pid, int matid, double A, const char *name);
+
+/*! \fn void VKModelCreateRod(int mid, int rid, int pid, int n1, int n2);
+* \brief Creates a new rod element.
+* \param mid the model's id, a positive integer.
+* \param rid the element's id, a positive integer.
+* \param pid the element's property id, which must exist in model.
+* \param n1 the element's first node, which must exist in model.
+* \param n2 the element's second node, which must exist in model.
+* \return TODO
+* @see TODO
+*/
+extern DLL_PUBLIC int VKModelCreateRod(int mid, int rid, int pid, int n1, int n2);
+
+/*! \fn void VKModelCreateSpc(nt mid, int sid, int dofs, int nid);
+* \brief Creates a new single point constraint.
+* \param mid the model's id, a positive integer.
+* \param sid the spc's id, a positive integer.
+* \param dofs the degrees to constrain.
+* \param nid the node onto which the spc is applied, which must exist in model.
+* \return TODO
+* @see TODO
+*/
+extern DLL_PUBLIC int VKModelCreateSpc(int mid, int sid, int dofs, int nid);
+
+/*! \fn void VKModelCreateForce(int mid, int fid, int nid, double magn, double nx, double ny, double nz);
+* \brief Creates a new point load.
+* \param mid the model's id, a positive integer.
+* \param fid the force's id, a positive integer.
+* \param node the node onto which the force will be applied, which must exist in model.
+* \param magn the force's magnitude.
+* \param nx the force's direction component in the x direction.
+* \param ny the force's direction component in the y direction.
+* \param nz the force's direction component in the z direction.
+* \return TODO
+* @see TODO
+*/
+extern DLL_PUBLIC int VKModelCreateForce(int mid, int fid, int nid, double magn, double nx, double ny, double nz);
 
 #ifdef __cplusplus
 }
