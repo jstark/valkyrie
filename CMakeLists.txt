@@ -46,6 +46,9 @@ add_subdirectory (src)
 #lua modules
 add_subdirectory (lua)
 
+#doc
+add_subdirectory (doxygen)
+
 ## tests
 enable_testing()
 find_package (GTEST)
