@@ -142,7 +142,7 @@ extern DLL_PUBLIC int VKModelCreateProperty(int mid, int pid, int matid, double 
 */
 extern DLL_PUBLIC int VKModelCreateRod(int mid, int rid, int pid, int n1, int n2);
 
-/*! \fn void VKModelCreateSpc(nt mid, int sid, int dofs, int nid);
+/*! \fn int VKModelCreateSpc(int mid, int sid, int dofs, int nid);
 * \brief Creates a new single point constraint.
 * \param mid the model's id, a positive integer.
 * \param sid the spc's id, a positive integer.
@@ -157,7 +157,7 @@ extern DLL_PUBLIC int VKModelCreateSpc(int mid, int sid, int dofs, int nid);
 * \brief Creates a new point load.
 * \param mid the model's id, a positive integer.
 * \param fid the force's id, a positive integer.
-* \param node the node onto which the force will be applied, which must exist in model.
+* \param nid the node id onto which the force will be applied, which must exist in model.
 * \param magn the force's magnitude.
 * \param nx the force's direction component in the x direction.
 * \param ny the force's direction component in the y direction.
