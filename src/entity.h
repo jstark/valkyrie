@@ -3,19 +3,13 @@
 
 #include <string>
 #include <map>
-
+#include "valkyrie.h"
 #include <boost/shared_ptr.hpp>
 
 namespace valkyrie
 {
 
 #define LOG_DESTRUCTORS
-
-#define kActionOK                   1 << 0
-#define kActionFailed               1 << 1
-#define kActionErrorIdAlreadyExists 1 << 2
-#define kActionErrorIdDoesNotExist  1 << 3
-#define kActionErrorInvalidArgs     1 << 4
 
 class Entity
 {

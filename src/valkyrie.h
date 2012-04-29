@@ -38,6 +38,12 @@ extern "C" {
 #define VK_API_PATCH 0
 #define VK_API_VERSION "1.0.0"
 
+#define kActionOK                   1 << 0
+#define kActionFailed               1 << 1
+#define kActionErrorIdAlreadyExists 1 << 2
+#define kActionErrorIdDoesNotExist  1 << 3
+#define kActionErrorInvalidArgs     1 << 4
+
 /* version related functions */
 
 /*! \fn void VKApiMajorVersion(void);
@@ -95,8 +101,8 @@ extern DLL_PUBLIC int VKModelCreate(int mid, const char *name);
 * \param x the node's x coordinate.
 * \param y the node's y coordinate.
 * \param z the node's z coordinate.
-* \return TODO
-* @see TODO
+* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* @see \ref VKModelCreateNode, \ref VKModelCreateMaterial
 */
 extern DLL_PUBLIC int VKModelCreateNode(int mid, int nid, double x, double y, double z);
 
@@ -107,8 +113,8 @@ extern DLL_PUBLIC int VKModelCreateNode(int mid, int nid, double x, double y, do
 * \param E the material's young modulus, a positive number.
 * \param rho the material's density, a positive number.
 * \param name the material's name, which can be NULL.
-* \return TODO
-* @see TODO
+* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* @see \ref VKModelCreate
 */
 extern DLL_PUBLIC int VKModelCreateMaterial(int modelid, int matid, double E, double rho, const char *name);
 
@@ -119,8 +125,8 @@ extern DLL_PUBLIC int VKModelCreateMaterial(int modelid, int matid, double E, do
 * \param matid the property's material id, which must exist in model.
 * \param A the cross-section value, a positive number.
 * \param name the property's name.
-* \return TODO
-* @see TODO
+* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* @see \ref VKModelCreateMaterial
 */
 extern DLL_PUBLIC int VKModelCreateProperty(int mid, int pid, int matid, double A, const char *name);
 
@@ -131,8 +137,8 @@ extern DLL_PUBLIC int VKModelCreateProperty(int mid, int pid, int matid, double 
 * \param pid the element's property id, which must exist in model.
 * \param n1 the element's first node, which must exist in model.
 * \param n2 the element's second node, which must exist in model.
-* \return TODO
-* @see TODO
+* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* @see \ref VKModelCreateNode, \ref VKModelCreateProperty
 */
 extern DLL_PUBLIC int VKModelCreateRod(int mid, int rid, int pid, int n1, int n2);
 
@@ -142,8 +148,8 @@ extern DLL_PUBLIC int VKModelCreateRod(int mid, int rid, int pid, int n1, int n2
 * \param sid the spc's id, a positive integer.
 * \param dofs the degrees to constrain.
 * \param nid the node onto which the spc is applied, which must exist in model.
-* \return TODO
-* @see TODO
+* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* @see \ref VKModelCreateForce
 */
 extern DLL_PUBLIC int VKModelCreateSpc(int mid, int sid, int dofs, int nid);
 
@@ -156,8 +162,8 @@ extern DLL_PUBLIC int VKModelCreateSpc(int mid, int sid, int dofs, int nid);
 * \param nx the force's direction component in the x direction.
 * \param ny the force's direction component in the y direction.
 * \param nz the force's direction component in the z direction.
-* \return TODO
-* @see TODO
+* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* @see \ref VKModelCreateSpc
 */
 extern DLL_PUBLIC int VKModelCreateForce(int mid, int fid, int nid, double magn, double nx, double ny, double nz);
 
