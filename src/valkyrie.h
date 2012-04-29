@@ -47,6 +47,10 @@ extern "C" {
 #define kStaticAnalysisFailure      1 << 6
 #define kStaticAnalysisResultsMissing      1 << 7
 
+#define kTranslateXDof  1
+#define kTranslateYDof  2
+#define kTranslateZDof  4
+
 /* version related functions */
 
 /*! \fn void VKApiMajorVersion(void);

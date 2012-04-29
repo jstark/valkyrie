@@ -13,10 +13,6 @@ namespace valkyrie
 
 class Node;
 
-#define kTranslateXDof  1
-#define kTranslateYDof  2
-#define kTranslateZDof  4
-
 class DLL_HIDDEN Spc : private Entity
 {
 public:
