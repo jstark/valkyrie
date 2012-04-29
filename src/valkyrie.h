@@ -43,6 +43,9 @@ extern "C" {
 #define kActionErrorIdAlreadyExists 1 << 2
 #define kActionErrorIdDoesNotExist  1 << 3
 #define kActionErrorInvalidArgs     1 << 4
+#define kStaticAnalysisSuccess      1 << 5
+#define kStaticAnalysisFailure      1 << 6
+#define kStaticAnalysisResultsMissing      1 << 7
 
 /* version related functions */
 
@@ -153,7 +156,7 @@ extern DLL_PUBLIC int VKModelCreateRod(int mid, int rid, int pid, int n1, int n2
 */
 extern DLL_PUBLIC int VKModelCreateSpc(int mid, int sid, int dofs, int nid);
 
-/*! \fn void VKModelCreateForce(int mid, int fid, int nid, double magn, double nx, double ny, double nz);
+/*! \fn int VKModelCreateForce(int mid, int fid, int nid, double magn, double nx, double ny, double nz);
 * \brief Creates a new point load.
 * \param mid the model's id, a positive integer.
 * \param fid the force's id, a positive integer.
@@ -166,6 +169,55 @@ extern DLL_PUBLIC int VKModelCreateSpc(int mid, int sid, int dofs, int nid);
 * @see \ref VKModelCreateSpc
 */
 extern DLL_PUBLIC int VKModelCreateForce(int mid, int fid, int nid, double magn, double nx, double ny, double nz);
+
+/*! \fn int VKModelCreateForce(int mid);
+ * \brief Performs a static analysis on the given model (id).
+ * \return Returns \ref kActionOK on success, otherwise an error code is returned.
+ * @see \ref kStaticAnalysisFailure
+ */
+extern DLL_PUBLIC int VKModelPerformStaticAnalysis(int mid);
+
+/*! \typedef void (*VK_FOR_EACH_NODAL_RESULT_FUNCTION)(int nid, double ux, double uy, double uz, double react_x, double react_y, double react_z, void *data);
+ *  \brief The function signature for callbacks used with \ref VKStaticAnalysisForEachNodalResult.
+ * @see \ref VKStaticAnalysisForEachNodalResult
+ */
+typedef void (*VK_FOR_EACH_NODAL_RESULT_FUNCTION)(
+        int nid,
+        double ux,
+        double uy,
+        double uz,
+        double react_x,
+        double react_y,
+        double react_z,
+        void *data);
+
+/*! int VKStaticAnalysisForEachNodalResult(int mid, VK_FOR_EACH_NODAL_RESULT_FUNCTION fun, void *data);
+ *  \brief Runs a function for each nodal result.
+ *  \param mid the model id.
+ *  \param fun the function to run
+ *  \param data the user data, if any.
+ */
+extern DLL_PUBLIC int VKStaticAnalysisForEachNodalResult(int mid, VK_FOR_EACH_NODAL_RESULT_FUNCTION fun, void *data);
+
+
+/*! \typedef void (*VK_FOR_EACH_ELEMENT_RESULT_FUNCTION)(int eid, double stress, double strain, double force, void *data);
+ *  \brief The function signature for callbacks used with \ref VKStaticAnalysisForElementResult.
+ * @see \ref VKStaticAnalysisForEachElementalResult
+ */
+typedef void (*VK_FOR_EACH_ELEMENT_RESULT_FUNCTION)(
+        int eid,
+        double stress,
+        double strain,
+        double force,
+        void *data);
+
+/*! int VKStaticAnalysisForEachElementalResult(int mid, VK_FOR_EACH_ELEMENT_RESULT_FUNCTION fun, void *data);
+ *  \brief Runs a function for each element result.
+ *  \param mid the model id.
+ *  \param fun the function to run
+ *  \param data the user data, if any.
+ */
+extern DLL_PUBLIC int VKStaticAnalysisForEachElementResult(int mid, VK_FOR_EACH_ELEMENT_RESULT_FUNCTION fun, void *data);
 
 #ifdef __cplusplus
 }
