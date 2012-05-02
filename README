@@ -4,7 +4,13 @@ http://anvilofcode.wordpress.com
 
 Overview
 ---------
-"Valkyrie" is (will be) a simple API for solving truss and frame structures.
+"Valkyrie" is a simple API for solving 2D/3D truss structures. A Lua driver script
+is offered through which you can solve simple truss structures and print displacements,
+stresses, strains, etc. 
+
+Version
+---------
+The current version is 1.0b, which is the first beta release.
 
 Copyright
 ---------
