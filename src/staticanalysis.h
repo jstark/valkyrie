@@ -10,7 +10,9 @@ using Eigen::VectorXd;
 namespace valkyrie
 {
 
-
+#define kStaticAnalysisSuccess             1 << 0
+#define kStaticAnalysisFailure             1 << 1
+#define kStaticAnalysisResultsMissing      1 << 2
 
 class Model;
 

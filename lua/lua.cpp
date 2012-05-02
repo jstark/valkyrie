@@ -43,8 +43,11 @@ static int l_version(lua_State *L)
 
 static int return_value(lua_State *L, int code)
 {
-    /* TODO */
-    lua_pushinteger(L, code);
+    const char *errmsg = VKErrorMessage(code);
+    if (errmsg)
+    {
+        return luaL_error(L, errmsg);
+    }
     return 1;
 }
 
@@ -115,7 +118,7 @@ static int l_model_create_spc(lua_State *L)
 {
     int mid = luaL_checkinteger(L, 1);
     int sid = luaL_checkinteger(L, 2);
-    int dofs = kTranslateXDof | kTranslateYDof | kTranslateZDof; //FIXME TODO
+    int dofs = luaL_checkinteger(L, 3);
     int nid = luaL_checkinteger(L, 4);
     return return_value(L, VKModelCreateSpc(mid, sid, dofs, nid));
 }
@@ -132,10 +135,25 @@ static int l_model_create_force(lua_State *L)
     return return_value(L, VKModelCreateForce(mid, fid, nid, M, nx, ny, nz));
 }
 
+static int l_model_get_constraint_code(lua_State *L)
+{
+    int x = luaL_checkinteger(L, 1);
+    int y = luaL_checkinteger(L, 2);
+    int z = luaL_checkinteger(L, 3);
+    lua_pushinteger(L, VKDofCode(x, y, z));
+    return 1;
+}
+
 static int l_model_perform_static_analysis(lua_State *L)
 {
     int mid = luaL_checkinteger(L, 1);
     return return_value(L, VKModelPerformStaticAnalysis(mid));
+}
+
+static int l_model_print_results(lua_State *L)
+{
+    int mid = luaL_checkinteger(L, 1);
+    return return_value(L, VKStaticAnalysisPrintResults(mid));
 }
 
 static const struct luaL_Reg valkyrie [] = {
@@ -149,9 +167,11 @@ static const struct luaL_Reg valkyrie [] = {
     {"create_material", l_model_create_material},
     {"create_property", l_model_create_property},
     {"create_element", l_model_create_element},
+    {"constraint_code", l_model_get_constraint_code},
     {"create_spc", l_model_create_spc},
     {"create_force", l_model_create_force},
     {"perform_static_analysis", l_model_perform_static_analysis},
+    {"print_results", l_model_print_results},
     {NULL, NULL}
 };
 

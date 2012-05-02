@@ -38,18 +38,28 @@ extern "C" {
 #define VK_API_PATCH 0
 #define VK_API_VERSION "1.0.0"
 
-#define kActionOK                   1 << 0
-#define kActionFailed               1 << 1
-#define kActionErrorIdAlreadyExists 1 << 2
-#define kActionErrorIdDoesNotExist  1 << 3
-#define kActionErrorInvalidArgs     1 << 4
-#define kStaticAnalysisSuccess      1 << 5
-#define kStaticAnalysisFailure      1 << 6
-#define kStaticAnalysisResultsMissing      1 << 7
+/*! \fn const char *VKErrorMessage(int errcode);
+* \brief Gets the error message for an error code.
+* \param errcode the error code.
+* \return returns the error message, or NULL if code is not
+* an error.
+* @see \ref kActionOK
+*/
+extern DLL_PUBLIC const char *VKErrorMessage(int errcode);
 
 #define kTranslateXDof  1
 #define kTranslateYDof  2
 #define kTranslateZDof  4
+
+/*! \fn int VKDofCode(int x, int y, int z);
+* \brief Calculates the dof code of a constraint combination.
+* \param x the x translation component. Pass 1 to constrain, or 0 otherwise.
+* \param y the y translation component. Pass 1 to constrain, or 0 otherwise.
+* \param z the z translation component. Pass 1 to constrain, or 0 otherwise.
+* \return The dof code to be used with an spc constraint.
+* @see \ref VKModelCreateSpc
+*/
+extern DLL_PUBLIC int VKDofCode(int x, int y, int z);
 
 /* version related functions */
 
@@ -223,6 +233,11 @@ typedef void (*VK_FOR_EACH_ELEMENT_RESULT_FUNCTION)(
  */
 extern DLL_PUBLIC int VKStaticAnalysisForEachElementResult(int mid, VK_FOR_EACH_ELEMENT_RESULT_FUNCTION fun, void *data);
 
+/*! int VKStaticAnalysisPrintResults(int mid);
+ *  \brief Prints nodal and elemental results in stdio.
+ *  \param mid the model id.
+ */
+extern DLL_PUBLIC int VKStaticAnalysisPrintResults(int mid);
 #ifdef __cplusplus
 }
 #endif

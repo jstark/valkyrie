@@ -162,3 +162,86 @@ extern "C" int VKStaticAnalysisForEachElementResult(int mid, VK_FOR_EACH_ELEMENT
     std::for_each(res->beginElementResults(), res->endElementResults(), for_each_element_result(fun, data));
     return kActionOK;
 }
+
+extern "C" const char *VKErrorMessage(int errcode)
+{
+    if ((errcode & kActionOK) || (errcode & kStaticAnalysisSuccess))
+    {
+        return NULL;
+    } else if (errcode & kActionErrorInvalidArgs)
+    {
+        return "Invalid argument";
+    } else if (errcode & kActionErrorIdAlreadyExists)
+    {
+        return "Id already exists";
+    } else if (errcode & kStaticAnalysisResultsMissing)
+    {
+        return "No results exist";
+    } else if (errcode & kStaticAnalysisFailure)
+    {
+        return "Static analysis failed";
+    } else
+    {
+        abort();
+        return NULL;
+    }
+}
+
+extern "C" int VKDofCode(int x, int y, int z)
+{
+    int code = 0;
+
+    if (x) code |= kTranslateXDof;
+    if (y) code |= kTranslateYDof;
+    if (z) code |= kTranslateZDof;
+
+    return code;
+}
+
+static const char *s_label_nodeid = "Node ID";
+static const char *s_label_UX = "UX";
+static const char *s_label_UY = "UY";
+static const char *s_label_UZ = "UZ";
+static const char *s_label_ReactX = "React X";
+static const char *s_label_ReactY = "React Y";
+static const char *s_label_ReactZ = "React Z";
+static const char *s_label_elementid = "Rod ID";
+static const char *s_label_stress = "Stress";
+static const char *s_label_strain = "Strain";
+static const char *s_label_force = "Force";
+
+static void s_print_nodal(int nid, double ux, double uy, double uz, double react_x, double react_y, double react_z, void *data)
+{
+    printf("% 8d\t% 8.3le\t% 8.3le\t% 8.3le\t% 8.3le\t% 8.3le\t% 8.3le\n",
+           nid, ux, uy, uz, react_x, react_y, react_z);
+}
+
+static void s_print_elemental(int nid, double stress, double strain, double force, void *data)
+{
+    printf("% 8d\t% 8.3le\t% 8.3le\t% 8.3le\n",
+           nid, strain, stress, force);
+}
+
+extern "C" int VKStaticAnalysisPrintResults(int mid)
+{
+    printf("%8s\t%8s\t%8s\t%8s\t%8s\t%8s\t%8s\n",
+           s_label_nodeid,
+           s_label_UX,
+           s_label_UY,
+           s_label_UZ,
+           s_label_ReactX,
+           s_label_ReactY,
+           s_label_ReactZ);
+    int ret = VKStaticAnalysisForEachNodalResult(mid, s_print_nodal, NULL);
+    if (ret & kActionFailed)
+    {
+        return ret;
+    }
+    printf("%8s\t%8s\t%8s\t%8s\n",
+           s_label_elementid,
+           s_label_stress,
+           s_label_strain,
+           s_label_force);
+    ret = VKStaticAnalysisForEachElementResult(mid, s_print_elemental, NULL);
+    return ret;
+}
