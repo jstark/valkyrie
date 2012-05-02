@@ -175,9 +175,16 @@ static const struct luaL_Reg valkyrie [] = {
     {NULL, NULL}
 };
 
-int luaopen_valkyrie (lua_State *L)
+#define LUA_API
+
+#ifdef _WIN32
+#undef LUA_API
+#define LUA_API __declspec(dllexport)
+#endif
+
+LUA_API int luaopen_lvalkyrie (lua_State *L)
 {
-    luaL_register(L, "valkyrie", valkyrie);
+    luaL_register(L, "lvalkyrie", valkyrie);
     return 1;
 }
 
