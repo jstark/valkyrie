@@ -1,4 +1,4 @@
-valkyrie = require 'luavalkyrie'
+valkyrie = require 'lvalkyrie'
 
 model = {}
 model.id = 1;
