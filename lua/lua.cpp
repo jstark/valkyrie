@@ -179,7 +179,7 @@ static const struct luaL_Reg valkyrie [] = {
 
 #ifdef _WIN32
 #undef EXPORT_WIN32
-#define EXPORT_WIN32 __declspec(dllexpor)
+#define EXPORT_WIN32 __declspec(dllexport)
 #endif
 
 EXPORT_WIN32 int luaopen_lvalkyrie (lua_State *L)
