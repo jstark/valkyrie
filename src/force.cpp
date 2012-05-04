@@ -33,6 +33,7 @@ shared_ptr<Force> valkyrie::try_create_force(int fid, shared_ptr<Node> n, double
     Force *f = 0;
     if (n && !unit_vector(nx, ny, nz, &nx, &ny, &nz))
     {
+        LOG("[ctor][force]{fid = %d, node = %d, magnitude = %le, nx = %le, ny = %le, nz = %le}\n", fid, n->get_id(), magn, nx, ny, nz);
         f = new Force(fid, "", n, magn, nx, ny, nz);
     }
     return make_shared(f);

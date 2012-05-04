@@ -49,6 +49,9 @@ add_subdirectory (lua)
 #doc
 add_subdirectory (doxygen)
 
+#examples
+add_subdirectory (examples)
+
 ## tests
 enable_testing()
 find_package (GTEST)

@@ -14,6 +14,7 @@ shared_ptr<Spc> valkyrie::try_create_spc(int sid, int dofs, shared_ptr<Node> n)
     Spc *s = 0;
     if (n)
     {
+        LOG("[ctor][spc]{sid = %d, dofs = %d, node = %d}\n", sid, dofs, n->get_id());
         s = new Spc(sid, "", dofs, n);
     }
     return make_shared(s);

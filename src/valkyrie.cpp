@@ -195,6 +195,7 @@ extern "C" int VKDofCode(int x, int y, int z)
     if (y) code |= kTranslateYDof;
     if (z) code |= kTranslateZDof;
 
+    LOG("[VKDofCode]{x = %d, y = %d, z = %d, dof = %d}\n", x, y, z, code);
     return code;
 }
 

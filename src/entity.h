@@ -9,7 +9,13 @@
 namespace valkyrie
 {
 
-#define LOG_DESTRUCTORS
+#define LOG_PROCESS                 1
+
+#define LOG(format, ...)\
+    if (LOG_PROCESS && !NDEBUG) {\
+    printf(format, __VA_ARGS__);\
+    }
+
 #define kActionOK                   1 << 0
 #define kActionFailed               1 << 1
 #define kActionErrorIdAlreadyExists 1 << 2

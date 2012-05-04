@@ -1,3 +1,4 @@
+#!/usr/bin/env lua
 valkyrie = require 'lvalkyrie'
 
 model = {}
@@ -48,7 +49,7 @@ model.constrained_at = function (...)
     if #args > 3 then error('up to three constraints can be specified') end
     c = {}
     for i = 1, #args do
-        c[i] = 1;
+        c[args[i]] = 1;
     end
     return function (dof)
         return c[dof] or 0
