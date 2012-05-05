@@ -6,11 +6,21 @@ Overview
 ---------
 "Valkyrie" is a simple API for solving 2D/3D truss structures. A Lua driver script
 is offered through which you can solve simple truss structures and print displacements,
-stresses, strains, etc. 
+stresses, strains, etc. The library can also be used with C/C++.
 
 Version
 ---------
 The current version is 1.0b, which is the first beta release.
+
+Roadmap
+---------
+version 1.1:    Better error handling and diagnostics
+version 1.2:    Use sparse stiffness matrix to handle larger structures.
+                Increase allowable maximum number of unknowns.
+version 1.3:    Offer better lua integration (e.g result iterators, etc)
+version 1.4:    Handle nonzero single point constraints.
+version 2.0:    Couple with 'revolution' optimizer.
+
 
 Copyright
 ---------
