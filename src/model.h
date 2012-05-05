@@ -35,6 +35,7 @@ public:
     typedef EntityDb<Rod>::const_iterator const_elem_iterator;
     const_elem_iterator beginElems() const { return elements_.begin(); }
     const_elem_iterator endElems() const { return elements_.end(); }
+    int elem_size() const { return elements_.size(); }
     int createRod(int eid, int pid, int nid_i, int nid_j);
 
     typedef EntityDb<Spc>::const_iterator const_spc_iterator;
