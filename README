@@ -10,7 +10,7 @@ stresses, strains, etc. The library can also be used with C/C++.
 
 Version
 ---------
-The current version is 1.0b, which is the first beta release.
+The current version is 1.0, which is the first release.
 
 Roadmap
 ---------
@@ -20,6 +20,12 @@ version 1.2:    Use sparse stiffness matrix to handle larger structures.
 version 1.3:    Offer better lua integration (e.g result iterators, etc)
 version 1.4:    Handle nonzero single point constraints.
 version 2.0:    Couple with 'revolution' optimizer.
+
+Build
+---------
+NOTE & WARNING: to build valkyrie, you need to create a directory named 'include' inside your checkout, 
+and put there the Eigen library's header. Valkyrie uses Eigen internally as a solver. Boost is also a prerequisite.
+If you don't want to mess with building Valkyrie, you can grab binaries at http://anvilofcode.wordpress.com
 
 
 Copyright
