@@ -220,7 +220,7 @@ static void s_print_nodal(int nid, double ux, double uy, double uz, double react
 static void s_print_elemental(int nid, double stress, double strain, double force, void *data)
 {
     printf("% 8d\t% 8.3le\t% 8.3le\t% 8.3le\n",
-           nid, strain, stress, force);
+           nid, stress, strain, force);
 }
 
 extern "C" int VKStaticAnalysisPrintResults(int mid)

@@ -23,7 +23,8 @@ using valkyrie::StaticAnalysisResults;
 #define MAX_ALLOWABLE_NODES     200
 #define MAX_DOFS_PER_NODE         3
 #define MAX_NODES_PER_ELEMENT     2
-
+//#define D_PRINT_INITIAL_SYSTEM
+//#define D_PRINT_FINAL_SYSTEM      
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
@@ -58,21 +59,31 @@ namespace
 
             int indices[MAX_NODES_PER_ELEMENT * MAX_DOFS_PER_NODE] = {-1};
 
+            typedef std::map<int,int>::const_iterator const_iterator;
+
             // get rows/columns
             int id1 = n1->get_id();
-            int row1= (*nid2row_)[id1];
-            if (row1 == 0) // not added previously
+            const_iterator iter = nid2row_->find(id1);
+            int row1 = -1;
+            if (iter == nid2row_->end()) // not added previously
             {
-                row1 = nid2row_->size()-1;
-                (*nid2row_)[id1] = row1; // subtract 1 because it was added in the map by the [] operator
+                row1 = nid2row_->size();
+                (*nid2row_)[id1] = row1; 
+            } else
+            {
+                row1 = iter->second;
             }
 
             int id2 = n2->get_id();
-            int row2= (*nid2row_)[id2];
-            if (row2 == 0)
+            iter = nid2row_->find(id2);
+            int row2 = -1;
+            if (iter == nid2row_->end())
             {
-                row2 = nid2row_->size()-1;
-                (*nid2row_)[id2] = row2; // subtract 1 because it was added in the map by the [] operator
+                row2 = nid2row_->size();
+                (*nid2row_)[id2] = row2; 
+            } else
+            {
+                row2 = iter->second;
             }
 
             indices[0] = (row1 + 0) * MAX_DOFS_PER_NODE;
@@ -281,6 +292,7 @@ int StaticAnalysis::analyze(const Model& model, valkyrie::StaticAnalysisResults 
 
     // stiffness matrix
     MatrixXd K = MatrixXd::Zero(n * MAX_DOFS_PER_NODE, n * MAX_DOFS_PER_NODE); // TODO: sparse matrix
+    
     std::for_each(model.beginElems(), model.endElems(), updateStiffness(K, &nid2row));
     // force vector
     VectorXd F = VectorXd::Zero(n * MAX_DOFS_PER_NODE);
@@ -289,8 +301,14 @@ int StaticAnalysis::analyze(const Model& model, valkyrie::StaticAnalysisResults 
     // copy global matrix (NOTE: we would never do this shit on a real FEM program)
     MatrixXd Kglobal(K);
 
+#ifdef D_PRINT_FINAL_SYSTEM
+    std::cout << "A = \n" << K << "\n";
+    std::cout << "F = \n" << F << "\n";
+#endif   
+    
     // apply spcs
     std::for_each(model.beginSpcs(), model.endSpcs(), applySpcs(K, F, &nid2row));
+
 
     // fix zero on diagonal
     // search for zero values on main diagonal of 'K'. if a zero is found, it is replaced
@@ -303,6 +321,11 @@ int StaticAnalysis::analyze(const Model& model, valkyrie::StaticAnalysisResults 
             F(i) = 0.0;
         }
     }
+
+#ifdef D_PRINT_FINAL_SYSTEM
+    std::cout << "A = \n" << K << "\n";
+    std::cout << "F = \n" << F << "\n";
+#endif   
 
     // solution phase
     Eigen::LLT<MatrixXd> llt;
