@@ -43,7 +43,6 @@ extern "C" {
 * \param errcode the error code.
 * \return returns the error message, or NULL if code is not
 * an error.
-* @see \ref kActionOK
 */
 extern DLL_PUBLIC const char *VKErrorMessage(int errcode);
 
@@ -106,7 +105,7 @@ extern DLL_PUBLIC const char *VKApiVersion(void);
 * \param mid the model id, a positive integer.
 * \param name the model's name. If \a name is NULL, the model's name
 * will be an empty string.
-* \return TODO
+* \return the version's string representation as 'major.minor.patch'
 * @see
 */
 extern DLL_PUBLIC int VKModelCreate(int mid, const char *name);
@@ -118,7 +117,7 @@ extern DLL_PUBLIC int VKModelCreate(int mid, const char *name);
 * \param x the node's x coordinate.
 * \param y the node's y coordinate.
 * \param z the node's z coordinate.
-* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* \return Returns an error code. Use \ref VKErrorMessage to find out whether an error occurred. 
 * @see \ref VKModelCreateNode, \ref VKModelCreateMaterial
 */
 extern DLL_PUBLIC int VKModelCreateNode(int mid, int nid, double x, double y, double z);
@@ -130,7 +129,7 @@ extern DLL_PUBLIC int VKModelCreateNode(int mid, int nid, double x, double y, do
 * \param E the material's young modulus, a positive number.
 * \param rho the material's density, a positive number.
 * \param name the material's name, which can be NULL.
-* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* \return Returns an error code. Use \ref VKErrorMessage to find out whether an error occurred. 
 * @see \ref VKModelCreate
 */
 extern DLL_PUBLIC int VKModelCreateMaterial(int modelid, int matid, double E, double rho, const char *name);
@@ -142,7 +141,7 @@ extern DLL_PUBLIC int VKModelCreateMaterial(int modelid, int matid, double E, do
 * \param matid the property's material id, which must exist in model.
 * \param A the cross-section value, a positive number.
 * \param name the property's name.
-* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* \return Returns an error code. Use \ref VKErrorMessage to find out whether an error occurred. 
 * @see \ref VKModelCreateMaterial
 */
 extern DLL_PUBLIC int VKModelCreateProperty(int mid, int pid, int matid, double A, const char *name);
@@ -154,7 +153,7 @@ extern DLL_PUBLIC int VKModelCreateProperty(int mid, int pid, int matid, double 
 * \param pid the element's property id, which must exist in model.
 * \param n1 the element's first node, which must exist in model.
 * \param n2 the element's second node, which must exist in model.
-* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* \return Returns an error code. Use \ref VKErrorMessage to find out whether an error occurred. 
 * @see \ref VKModelCreateNode, \ref VKModelCreateProperty
 */
 extern DLL_PUBLIC int VKModelCreateRod(int mid, int rid, int pid, int n1, int n2);
@@ -165,7 +164,7 @@ extern DLL_PUBLIC int VKModelCreateRod(int mid, int rid, int pid, int n1, int n2
 * \param sid the spc's id, a positive integer.
 * \param dofs the degrees to constrain.
 * \param nid the node onto which the spc is applied, which must exist in model.
-* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* \return Returns an error code. Use \ref VKErrorMessage to find out whether an error occurred. 
 * @see \ref VKModelCreateForce
 */
 extern DLL_PUBLIC int VKModelCreateSpc(int mid, int sid, int dofs, int nid);
@@ -179,15 +178,15 @@ extern DLL_PUBLIC int VKModelCreateSpc(int mid, int sid, int dofs, int nid);
 * \param nx the force's direction component in the x direction.
 * \param ny the force's direction component in the y direction.
 * \param nz the force's direction component in the z direction.
-* \return Returns \ref kActionOK on success. Othewise, an error code is returned.
+* \return Returns an error code. Use \ref VKErrorMessage to find out whether an error occurred. 
 * @see \ref VKModelCreateSpc
 */
 extern DLL_PUBLIC int VKModelCreateForce(int mid, int fid, int nid, double magn, double nx, double ny, double nz);
 
-/*! \fn int VKModelCreateForce(int mid);
+/*! \fn int VKModelPerformStaticAnalysis(int mid);
  * \brief Performs a static analysis on the given model (id).
- * \return Returns \ref kActionOK on success, otherwise an error code is returned.
- * @see \ref kStaticAnalysisFailure
+ * \return Returns an error code. Use \ref VKErrorMessage to find out whether an error occurred. 
+ * @see \ref VKErrorMessage
  */
 extern DLL_PUBLIC int VKModelPerformStaticAnalysis(int mid);
 
@@ -215,8 +214,8 @@ extern DLL_PUBLIC int VKStaticAnalysisForEachNodalResult(int mid, VK_FOR_EACH_NO
 
 
 /*! \typedef void (*VK_FOR_EACH_ELEMENT_RESULT_FUNCTION)(int eid, double stress, double strain, double force, void *data);
- *  \brief The function signature for callbacks used with \ref VKStaticAnalysisForElementResult.
- * @see \ref VKStaticAnalysisForEachElementalResult
+ *  \brief The function signature for callbacks used with \ref VKStaticAnalysisForEachElementResult.
+ * @see \ref VKStaticAnalysisForEachElementResult
  */
 typedef void (*VK_FOR_EACH_ELEMENT_RESULT_FUNCTION)(
         int eid,
@@ -225,7 +224,7 @@ typedef void (*VK_FOR_EACH_ELEMENT_RESULT_FUNCTION)(
         double force,
         void *data);
 
-/*! int VKStaticAnalysisForEachElementalResult(int mid, VK_FOR_EACH_ELEMENT_RESULT_FUNCTION fun, void *data);
+/*! int VKStaticAnalysisForEachElementResult(int mid, VK_FOR_EACH_ELEMENT_RESULT_FUNCTION fun, void *data);
  *  \brief Runs a function for each element result.
  *  \param mid the model id.
  *  \param fun the function to run
