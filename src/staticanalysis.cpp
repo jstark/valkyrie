@@ -260,7 +260,7 @@ namespace
             VectorXd localDisplacements = T * globalDisplacements;
 
             // strain
-            double strain = (localDisplacements(0) - localDisplacements(1))/eL;
+            double strain = (localDisplacements(1) - localDisplacements(0))/eL;
             double stress = strain * E;
             double force  = stress * A;
             results_->setElementalResult(rod_id, strain, stress, force);
