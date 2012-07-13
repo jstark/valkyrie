@@ -5,7 +5,7 @@
 using valkyrie::Force;
 using valkyrie::Node;
 
-Force::Force(int id, const std::string &name, shared_ptr<Node> n, double magn, double nx, double ny, double nz)
+Force::Force(int id, const std::string &name, std::shared_ptr<Node> n, double magn, double nx, double ny, double nz)
     : Entity(id, name), n_(n), magnitude_(magn), nx_(nx), ny_(ny), nz_(nz)
 {
 }
@@ -28,7 +28,7 @@ static int unit_vector(double x, double y, double z, double *nx, double *ny, dou
     return ret;
 }
 
-shared_ptr<Force> valkyrie::try_create_force(int fid, shared_ptr<Node> n, double magn, double nx, double ny, double nz)
+std::shared_ptr<Force> valkyrie::try_create_force(int fid, std::shared_ptr<Node> n, double magn, double nx, double ny, double nz)
 {
     Force *f = 0;
     if (n && !unit_vector(nx, ny, nz, &nx, &ny, &nz))

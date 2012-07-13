@@ -3,8 +3,8 @@
 
 #include <string>
 #include <map>
+#include <memory>
 #include "valkyrie.h"
-#include <boost/shared_ptr.hpp>
 
 namespace valkyrie
 {
@@ -39,21 +39,19 @@ private:
     using Entity::get_id; \
     using Entity::get_name;
 
-using boost::shared_ptr;
-
 template<typename TEntity>
 class EntityDb
 {
 public:
     typedef TEntity entity_type;
     typedef int id_type;
-    typedef std::map<id_type, shared_ptr<TEntity> > db_type;
+    typedef std::map<id_type, std::shared_ptr<TEntity> > db_type;
     typedef typename db_type::size_type size_type;
     typedef typename db_type::const_iterator const_iterator;
 
 
-    int add(boost::shared_ptr<TEntity> ref);
-    shared_ptr<TEntity> find(int id) const;
+    int add(std::shared_ptr<TEntity> ref);
+    std::shared_ptr<TEntity> find(int id) const;
     int remove(int id);
     size_type size() const { return db_.size(); }
     const_iterator begin() const { return db_.begin(); }
@@ -63,7 +61,7 @@ private:
 };
 
 template<typename TEntity>
-int EntityDb<TEntity>::add(shared_ptr<TEntity> ref)
+int EntityDb<TEntity>::add(std::shared_ptr<TEntity> ref)
 {
     int id = ref->get_id(); // must have this property
     if (db_.find(id) != db_.end())
@@ -77,12 +75,12 @@ int EntityDb<TEntity>::add(shared_ptr<TEntity> ref)
 }
 
 template<typename TEntity>
-shared_ptr<TEntity> EntityDb<TEntity>::find(int id) const
+std::shared_ptr<TEntity> EntityDb<TEntity>::find(int id) const
 {
     typename db_type::const_iterator i = db_.find(id);
     if (i == db_.end())
     {
-        return shared_ptr<TEntity>((TEntity *)0);
+        return std::shared_ptr<TEntity>((TEntity *)0);
     }
     return i->second;
 }
@@ -98,9 +96,10 @@ int EntityDb<TEntity>::remove(int id)
     return kActionOK;
 }
 
-template<typename T> boost::shared_ptr<T> make_shared(T* instance)
+template<typename T> 
+std::shared_ptr<T> make_shared(T* instance)
 {
-    return boost::shared_ptr<T>(instance);
+    return std::shared_ptr<T>(instance);
 }
 
 }//~ valkyrie

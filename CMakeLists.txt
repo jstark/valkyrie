@@ -2,16 +2,6 @@ cmake_minimum_required (VERSION 2.8)
 
 project (valkyrie)
 
-## boost
-set (Boost_USE_STATIC_LIBS ON)
-set (Boost_USE_MULTITHREADED ON)
-set (Boost_USE_STATIC_RUNTIME ON)
-find_package(Boost 1.49.0)
-if (Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-    link_directories (${Boost_LIBRARY_DIRS})
-endif (Boost_FOUND)
-
 set (HEADERS
     ${CMAKE_SOURCE_DIR}/src/valkyrie.h
     ${CMAKE_SOURCE_DIR}/src/version.h
@@ -38,7 +28,7 @@ set (SOURCES
     ${CMAKE_SOURCE_DIR}/src/staticanalysis.cpp)
 
 #Eigen
-include_directories (${CMAKE_SOURCE_DIR}/include)
+include_directories ("/Users/john/Develop/Local/include")
 
 #library sources
 add_subdirectory (src)

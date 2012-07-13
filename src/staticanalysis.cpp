@@ -7,9 +7,8 @@
 #include "force.h"
 #include "spc.h"
 #include <algorithm>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
-using boost::shared_ptr;
 using valkyrie::StaticAnalysis;
 using valkyrie::Model;
 using valkyrie::Rod;
@@ -51,11 +50,11 @@ namespace
         explicit updateStiffness(MatrixXd &K, std::map<int, int> *nid2row)
             : K_(K), nid2row_(nid2row) {}
 
-        void operator()(const std::pair<int, shared_ptr<Rod> > &rod_entry) const
+        void operator()(const std::pair<int, std::shared_ptr<Rod> > &rod_entry) const
         {
-            shared_ptr<Rod> rod = rod_entry.second;
-            shared_ptr<Node> n1 = rod->get_node1();
-            shared_ptr<Node> n2 = rod->get_node2();
+            std::shared_ptr<Rod> rod = rod_entry.second;
+            std::shared_ptr<Node> n1 = rod->get_node1();
+            std::shared_ptr<Node> n2 = rod->get_node2();
 
             int indices[MAX_NODES_PER_ELEMENT * MAX_DOFS_PER_NODE] = {-1};
 
@@ -101,10 +100,10 @@ namespace
             double Cy = dy/eL;
             double Cz = dz/eL;
 
-            shared_ptr<Property> prop = rod->get_property();
+            std::shared_ptr<Property> prop = rod->get_property();
             double A  = prop->get_A();
 
-            shared_ptr<Material> matr = prop->get_material();
+            std::shared_ptr<Material> matr = prop->get_material();
             double E  = matr->get_E();
             double ct = A*E/eL;
 
@@ -131,10 +130,10 @@ namespace
 
         }
 
-        void operator()(const std::pair<int, shared_ptr<Force> > &force_entry) const
+        void operator()(const std::pair<int, std::shared_ptr<Force> > &force_entry) const
         {
-            shared_ptr<Force> f = force_entry.second;
-            shared_ptr<Node > n = f->get_node();
+            std::shared_ptr<Force> f = force_entry.second;
+            std::shared_ptr<Node > n = f->get_node();
 
             int nid = n->get_id();
             int row_id = (*nid2row_)[nid];
@@ -153,10 +152,10 @@ namespace
         applySpcs(MatrixXd& K, VectorXd &F, std::map<int, int> *nid2row)
             : K_(K), F_(F), nid2row_(nid2row) {}
 
-        void operator()(const std::pair<int, shared_ptr<Spc> > spc_entry)
+        void operator()(const std::pair<int, std::shared_ptr<Spc> > spc_entry)
         {
-            shared_ptr<Spc> spc = spc_entry.second;
-            shared_ptr<Node> node = spc->get_node();
+            std::shared_ptr<Spc> spc = spc_entry.second;
+            std::shared_ptr<Node> node = spc->get_node();
 
             int row_id = (*nid2row_)[node->get_id()];
             row_id *= MAX_DOFS_PER_NODE;
@@ -200,7 +199,7 @@ namespace
         updateNodalResults(const std::map<int, int> &nid2row, const VectorXd &x, const VectorXd &r, StaticAnalysisResults *results)
             : nid2row_(nid2row), x_(x), r_(r), results_(results) {}
 
-        void operator()(const std::pair<int, shared_ptr<Node> > &node_entry)
+        void operator()(const std::pair<int, std::shared_ptr<Node> > &node_entry)
         {
             int node_id = node_entry.first;
 
@@ -220,12 +219,12 @@ namespace
         updateElementalResults(StaticAnalysisResults *results)
             : results_(results) {}
 
-        void operator()(const std::pair<int, shared_ptr<Rod> > &rod_entry)
+        void operator()(const std::pair<int, std::shared_ptr<Rod> > &rod_entry)
         {
             int rod_id = rod_entry.first;
-            shared_ptr<Rod> rod = rod_entry.second;
-            shared_ptr<Node> n1 = rod->get_node1();
-            shared_ptr<Node> n2 = rod->get_node2();
+            std::shared_ptr<Rod> rod = rod_entry.second;
+            std::shared_ptr<Node> n1 = rod->get_node1();
+            std::shared_ptr<Node> n2 = rod->get_node2();
 
             int nid1 = n1->get_id();
             int nid2 = n2->get_id();
@@ -233,8 +232,8 @@ namespace
             const valkyrie::NodalResults res2 = results_->nodalResults(nid2);
 
             // calculate strain
-            shared_ptr<Property> prop = rod->get_property();
-            shared_ptr<Material> matr = prop->get_material();
+            std::shared_ptr<Property> prop = rod->get_property();
+            std::shared_ptr<Material> matr = prop->get_material();
 
             // calculate displacements on local coordinate system
             double dx = n2->get_x() - n1->get_x();
