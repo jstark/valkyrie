@@ -46,6 +46,9 @@ add_subdirectory (src)
 #lua modules
 add_subdirectory (lua)
 
+#python modules
+add_subdirectory (python)
+
 #doc
 add_subdirectory (doxygen)
 
