@@ -4,12 +4,12 @@
 using valkyrie::Spc;
 using valkyrie::Node;
 
-Spc::Spc(int id, const std::string &name, int dofs, shared_ptr<Node> n)
+Spc::Spc(int id, const std::string &name, int dofs, std::shared_ptr<Node> n)
     : Entity(id, name), n_(n), dofs_(dofs)
 {
 }
 
-shared_ptr<Spc> valkyrie::try_create_spc(int sid, int dofs, shared_ptr<Node> n)
+std::shared_ptr<Spc> valkyrie::try_create_spc(int sid, int dofs, std::shared_ptr<Node> n)
 {
     Spc *s = 0;
     if (n)

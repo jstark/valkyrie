@@ -4,7 +4,7 @@
 #include "staticanalysis.h"
 #include <string>
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 using valkyrie::EntityDb;
 using valkyrie::Model;
@@ -12,19 +12,18 @@ using valkyrie::StaticAnalysisResults;
 using valkyrie::StaticAnalysis;
 
 using std::map;
-using boost::shared_ptr;
 
 namespace
 {
     typedef EntityDb<Model> ModelDB;
     ModelDB models;
 
-    typedef std::map<shared_ptr<Model>, shared_ptr<StaticAnalysisResults> > ResultsDB;
+    typedef std::map<std::shared_ptr<Model>, std::shared_ptr<StaticAnalysisResults> > ResultsDB;
     ResultsDB results;
 }
 
 #define TRY_CREATE(what, mid, ...) \
-    shared_ptr<Model> realModel = models.find(mid); \
+    std::shared_ptr<Model> realModel = models.find(mid); \
     if (realModel) { \
         return realModel->create##what(__VA_ARGS__);\
     }\
@@ -36,7 +35,7 @@ extern "C" int VKModelCreate(int mid, const char *name)
     {
         return kActionFailed | kActionErrorIdAlreadyExists;
     }
-    models.add(shared_ptr<Model>(new Model(mid, std::string(name ? name : ""))));
+    models.add(std::shared_ptr<Model>(new Model(mid, std::string(name ? name : ""))));
     return kActionOK;
 }
 
@@ -72,13 +71,13 @@ extern "C" int VKModelCreateForce(int mid, int fid, int nid, double magn, double
 
 extern "C" int VKModelPerformStaticAnalysis(int mid)
 {
-    shared_ptr<Model> model = models.find(mid);
+    std::shared_ptr<Model> model = models.find(mid);
     if (!model)
     {
         return kActionFailed | kActionErrorIdDoesNotExist;
     }
 
-    shared_ptr<StaticAnalysisResults> res(new StaticAnalysisResults);
+    std::shared_ptr<StaticAnalysisResults> res(new StaticAnalysisResults);
     StaticAnalysis analysis;
     int result = analysis.analyze(*model, *res);
 
@@ -127,7 +126,7 @@ namespace {
 
 extern "C" int VKStaticAnalysisForEachNodalResult(int mid, VK_FOR_EACH_NODAL_RESULT_FUNCTION fun, void *data)
 {
-    shared_ptr<Model> model = models.find(mid);
+    std::shared_ptr<Model> model = models.find(mid);
     if (!model)
     {
         return kActionFailed | kActionErrorIdDoesNotExist;
@@ -139,14 +138,14 @@ extern "C" int VKStaticAnalysisForEachNodalResult(int mid, VK_FOR_EACH_NODAL_RES
         return kActionFailed | kStaticAnalysisResultsMissing;
     }
 
-    shared_ptr<StaticAnalysisResults> res = iter->second;
+    std::shared_ptr<StaticAnalysisResults> res = iter->second;
     std::for_each(res->beginNodalResults(), res->endNodalResults(), for_each_nodal_result(fun, data));
     return kActionOK;
 }
 
 extern "C" int VKStaticAnalysisForEachElementResult(int mid, VK_FOR_EACH_ELEMENT_RESULT_FUNCTION fun, void *data)
 {
-    shared_ptr<Model> model = models.find(mid);
+    std::shared_ptr<Model> model = models.find(mid);
     if (!model)
     {
         return kActionFailed | kActionErrorIdDoesNotExist;
@@ -158,7 +157,7 @@ extern "C" int VKStaticAnalysisForEachElementResult(int mid, VK_FOR_EACH_ELEMENT
         return kActionFailed | kStaticAnalysisResultsMissing;
     }
 
-    shared_ptr<StaticAnalysisResults> res = iter->second;
+    std::shared_ptr<StaticAnalysisResults> res = iter->second;
     std::for_each(res->beginElementResults(), res->endElementResults(), for_each_element_result(fun, data));
     return kActionOK;
 }
