@@ -101,10 +101,26 @@ static PyObject* vk_material_create(PyObject *self, PyObject *args)
     double E = 0;
     double rho = 0;
     const char *name = NULL;
-    int ok = PyArg_ParseTuple(args, "iiddi|s", &model_id, &material_id, &E, &rho, &name);
+    int ok = PyArg_ParseTuple(args, "iidd|s", &model_id, &material_id, &E, &rho, &name);
     if (!ok) return NULL;
 
     int code = VKModelCreateMaterial(model_id, material_id, E, rho, name);
+    const char *error_msg = NULL;
+    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
+    return PyLong_FromLong(code);
+}
+
+static PyObject* vk_property_create(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    int property_id = 0;
+    int material_id = 0;
+    double A = 0;
+    const char *name = NULL;
+    int ok = PyArg_ParseTuple(args, "iiid|s", &model_id, &property_id, &material_id, &A, &name);
+    if (!ok) return NULL;
+
+    int code = VKModelCreateProperty(model_id, property_id, material_id, A, name);
     const char *error_msg = NULL;
     THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
     return PyLong_FromLong(code);
@@ -119,6 +135,7 @@ static PyMethodDef ValkyrieMethods[] = {
     {"create_model", vk_model_create, METH_VARARGS, "Create a new FE model, with id and name"}, 
     {"create_node", vk_node_create, METH_VARARGS, "Create a new FE node"},
     {"create_material", vk_material_create, METH_VARARGS, "Create a new FE material"},
+    {"create_property", vk_property_create, METH_VARARGS, "Create a new FE property"},
 	{NULL, NULL, 0, NULL}
 };
 
