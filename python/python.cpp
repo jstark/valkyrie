@@ -126,6 +126,23 @@ static PyObject* vk_property_create(PyObject *self, PyObject *args)
     return PyLong_FromLong(code);
 }
 
+static PyObject* vk_rod_create(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    int rod_id = 0;
+    int prop_id = 0;
+    int node1_id = 0;
+    int node2_id = 0;
+    
+    int ok = PyArg_ParseTuple(args, "iii(ii)", &model_id, &rod_id, &prop_id, &node1_id, &node2_id);
+    if (!ok) return NULL;
+    
+    int code = VKModelCreateRod(model_id, rod_id, prop_id, node1_id, node2_id);
+    const char *error_msg = NULL;
+    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
+    return PyLong_FromLong(code);
+}
+
 static PyMethodDef ValkyrieMethods[] = {
 	{"major_version", vk_major_version, METH_VARARGS, "Valkyrie API major version"},
 	{"minor_version", vk_minor_version, METH_VARARGS, "Valkyrie API minor version"},
@@ -136,6 +153,7 @@ static PyMethodDef ValkyrieMethods[] = {
     {"create_node", vk_node_create, METH_VARARGS, "Create a new FE node"},
     {"create_material", vk_material_create, METH_VARARGS, "Create a new FE material"},
     {"create_property", vk_property_create, METH_VARARGS, "Create a new FE property"},
+    {"create_rod", vk_rod_create, METH_VARARGS, "Create a new FE rod element"},
 	{NULL, NULL, 0, NULL}
 };
 
