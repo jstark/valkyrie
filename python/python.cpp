@@ -19,6 +19,12 @@ static PyObject *ValkyrieError;
         return NULL;\
     }
 
+#define RETURN_SUCCESS_OR_THROW(fun) \
+    int code = fun;\
+    const char *error_msg = NULL;\
+    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);\
+    return PyLong_FromLong(code);
+
 static PyObject* vk_major_version(PyObject *self, PyObject *args)
 {
 	RETURN_ERROR_IF_CALLED_WITH_ARGS
@@ -70,12 +76,7 @@ static PyObject* vk_model_create(PyObject *self, PyObject *args)
     int model_id = 0;
     int ok = PyArg_ParseTuple(args, "i|s", &model_id, &model_name);
     if (!ok) return NULL;
-
-    int code = VKModelCreate(model_id, model_name);
-
-    const char *error_msg = NULL;
-    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
-    return PyLong_FromLong(code);
+    RETURN_SUCCESS_OR_THROW(VKModelCreate(model_id, model_name))
 }
 
 static PyObject* vk_node_create(PyObject *self, PyObject *args)
@@ -87,11 +88,7 @@ static PyObject* vk_node_create(PyObject *self, PyObject *args)
     double z = 0;
     int ok = PyArg_ParseTuple(args, "iiddd", &model_id, &node_id, &x, &y, &z);
     if (!ok) return NULL;
-
-    int code = VKModelCreateNode(model_id, node_id, x, y, z);
-    const char *error_msg = NULL;
-    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
-    return PyLong_FromLong(code);
+    RETURN_SUCCESS_OR_THROW(VKModelCreateNode(model_id, node_id, x, y, z));
 }
 
 static PyObject* vk_material_create(PyObject *self, PyObject *args)
@@ -103,11 +100,7 @@ static PyObject* vk_material_create(PyObject *self, PyObject *args)
     const char *name = NULL;
     int ok = PyArg_ParseTuple(args, "iidd|s", &model_id, &material_id, &E, &rho, &name);
     if (!ok) return NULL;
-
-    int code = VKModelCreateMaterial(model_id, material_id, E, rho, name);
-    const char *error_msg = NULL;
-    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
-    return PyLong_FromLong(code);
+    RETURN_SUCCESS_OR_THROW(VKModelCreateMaterial(model_id, material_id, E, rho, name));
 }
 
 static PyObject* vk_property_create(PyObject *self, PyObject *args)
@@ -119,11 +112,7 @@ static PyObject* vk_property_create(PyObject *self, PyObject *args)
     const char *name = NULL;
     int ok = PyArg_ParseTuple(args, "iiid|s", &model_id, &property_id, &material_id, &A, &name);
     if (!ok) return NULL;
-
-    int code = VKModelCreateProperty(model_id, property_id, material_id, A, name);
-    const char *error_msg = NULL;
-    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
-    return PyLong_FromLong(code);
+    RETURN_SUCCESS_OR_THROW(VKModelCreateProperty(model_id, property_id, material_id, A, name));
 }
 
 static PyObject* vk_rod_create(PyObject *self, PyObject *args)
@@ -136,25 +125,20 @@ static PyObject* vk_rod_create(PyObject *self, PyObject *args)
     
     int ok = PyArg_ParseTuple(args, "iii(ii)", &model_id, &rod_id, &prop_id, &node1_id, &node2_id);
     if (!ok) return NULL;
-    
-    int code = VKModelCreateRod(model_id, rod_id, prop_id, node1_id, node2_id);
-    const char *error_msg = NULL;
-    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
-    return PyLong_FromLong(code);
+    RETURN_SUCCESS_OR_THROW(VKModelCreateRod(model_id, rod_id, prop_id, node1_id, node2_id));
 }
 
 static PyObject* vk_spc_create(PyObject *self, PyObject *args)
 {
     int model_id = 0;
     int spc_id = 0;
-    int dofs = 0;
+    int xdof = 0;
+    int ydof = 0;
+    int zdof = 0;
     int node_id = 0;
-    int ok = PyArg_ParseTuple(args, "iiii", &model_id, &spc_id, &dofs, &node_id);
+    int ok = PyArg_ParseTuple(args, "ii(iii)i", &model_id, &spc_id, &xdof, &ydof, &zdof, &node_id);
     if (!ok) return NULL;
-    int code = VKModelCreateSpc(model_id, spc_id, dofs, node_id);
-    const char *error_msg = NULL;
-    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
-    return PyLong_FromLong(code);
+    RETURN_SUCCESS_OR_THROW(VKModelCreateSpc(model_id, spc_id, VKDofCode(xdof, ydof, zdof), node_id));
 }
 
 static PyObject* vk_force_create(PyObject *self, PyObject *args)
@@ -168,10 +152,23 @@ static PyObject* vk_force_create(PyObject *self, PyObject *args)
     double nz = 0.0;
     int ok = PyArg_ParseTuple(args, "iiid(ddd)", &model_id, &force_id, &node_id, &magnitude, &nx, &ny, &nz);
     if (!ok) return NULL;
-    int code = VKModelCreateForce(model_id, force_id, node_id, magnitude, nx, ny, nz);
-    const char *error_msg = NULL;
-    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
-    return PyLong_FromLong(code);
+    RETURN_SUCCESS_OR_THROW(VKModelCreateForce(model_id, force_id, node_id, magnitude, nx, ny, nz));
+}
+
+static PyObject* vk_run_static_analysis(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    int ok = PyArg_ParseTuple(args, "i", &model_id);
+    if (!ok) return NULL;
+    RETURN_SUCCESS_OR_THROW(VKModelPerformStaticAnalysis(model_id));
+}
+
+static PyObject* vk_print_static_analysis_results(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    int ok = PyArg_ParseTuple(args, "i", &model_id);
+    if (!ok) return NULL;
+    RETURN_SUCCESS_OR_THROW(VKStaticAnalysisPrintResults(model_id));
 }
 
 static PyMethodDef ValkyrieMethods[] = {
@@ -187,6 +184,8 @@ static PyMethodDef ValkyrieMethods[] = {
     {"create_rod", vk_rod_create, METH_VARARGS, "Create a new FE rod element"},
     {"create_spc", vk_spc_create, METH_VARARGS, "Create a new FE spc constraint"},
     {"create_force", vk_force_create, METH_VARARGS, "Create a new FE point load"},
+    {"run_static_analysis", vk_run_static_analysis, METH_VARARGS, "Run a static analysis on a given model"},
+    {"print_static_analysis_results", vk_print_static_analysis_results, METH_VARARGS, "Prints the results of a static analysis"},
 	{NULL, NULL, 0, NULL}
 };
 
@@ -197,7 +196,6 @@ static struct PyModuleDef valkyriemodule = {
 	-1,
 	ValkyrieMethods
 };
-
 
 PyMODINIT_FUNC
 PyInit_valkyrie(void)
