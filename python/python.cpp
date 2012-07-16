@@ -86,7 +86,7 @@ static PyObject* vk_node_create(PyObject *self, PyObject *args)
     double x = 0;
     double y = 0;
     double z = 0;
-    int ok = PyArg_ParseTuple(args, "iiddd", &model_id, &node_id, &x, &y, &z);
+    int ok = PyArg_ParseTuple(args, "ii(ddd)", &model_id, &node_id, &x, &y, &z);
     if (!ok) return NULL;
     RETURN_SUCCESS_OR_THROW(VKModelCreateNode(model_id, node_id, x, y, z));
 }
