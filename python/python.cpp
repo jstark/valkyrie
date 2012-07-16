@@ -143,6 +143,37 @@ static PyObject* vk_rod_create(PyObject *self, PyObject *args)
     return PyLong_FromLong(code);
 }
 
+static PyObject* vk_spc_create(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    int spc_id = 0;
+    int dofs = 0;
+    int node_id = 0;
+    int ok = PyArg_ParseTuple(args, "iiii", &model_id, &spc_id, &dofs, &node_id);
+    if (!ok) return NULL;
+    int code = VKModelCreateSpc(model_id, spc_id, dofs, node_id);
+    const char *error_msg = NULL;
+    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
+    return PyLong_FromLong(code);
+}
+
+static PyObject* vk_force_create(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    int force_id = 0;
+    int node_id = 0;
+    double magnitude = 0.0;
+    double nx = 0.0;
+    double ny = 0.0;
+    double nz = 0.0;
+    int ok = PyArg_ParseTuple(args, "iiid(ddd)", &model_id, &force_id, &node_id, &magnitude, &nx, &ny, &nz);
+    if (!ok) return NULL;
+    int code = VKModelCreateForce(model_id, force_id, node_id, magnitude, nx, ny, nz);
+    const char *error_msg = NULL;
+    THROW_EXCEPTION_IF(is_error_code(code, &error_msg), error_msg);
+    return PyLong_FromLong(code);
+}
+
 static PyMethodDef ValkyrieMethods[] = {
 	{"major_version", vk_major_version, METH_VARARGS, "Valkyrie API major version"},
 	{"minor_version", vk_minor_version, METH_VARARGS, "Valkyrie API minor version"},
@@ -154,6 +185,8 @@ static PyMethodDef ValkyrieMethods[] = {
     {"create_material", vk_material_create, METH_VARARGS, "Create a new FE material"},
     {"create_property", vk_property_create, METH_VARARGS, "Create a new FE property"},
     {"create_rod", vk_rod_create, METH_VARARGS, "Create a new FE rod element"},
+    {"create_spc", vk_spc_create, METH_VARARGS, "Create a new FE spc constraint"},
+    {"create_force", vk_force_create, METH_VARARGS, "Create a new FE point load"},
 	{NULL, NULL, 0, NULL}
 };
 
