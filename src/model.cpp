@@ -27,7 +27,7 @@ Model::~Model()
 
 int Model::createNode(int id, double x, double y, double z)
 {
-    return nodes_.add(make_shared(new Node(id, x, y, z)));
+    return nodes_.add(std::make_shared<Node>(id, x, y, z));
 }
 
 int Model::createMaterial(int mid, double E, double rho, const std::string &name)

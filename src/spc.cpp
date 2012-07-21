@@ -11,11 +11,11 @@ Spc::Spc(int id, const std::string &name, int dofs, std::shared_ptr<Node> n)
 
 std::shared_ptr<Spc> valkyrie::try_create_spc(int sid, int dofs, std::shared_ptr<Node> n)
 {
-    Spc *s = 0;
+    std::shared_ptr<Spc> s;
     if (n)
     {
         LOG("[ctor][spc]{sid = %d, dofs = %d, node = %d}\n", sid, dofs, n->get_id());
-        s = new Spc(sid, "", dofs, n);
+        s = std::make_shared<Spc>(sid, "", dofs, n);
     }
-    return make_shared(s);
+    return s;
 }

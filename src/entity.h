@@ -96,12 +96,6 @@ int EntityDb<TEntity>::remove(int id)
     return kActionOK;
 }
 
-template<typename T> 
-std::shared_ptr<T> make_shared(T* instance)
-{
-    return std::shared_ptr<T>(instance);
-}
-
 }//~ valkyrie
 
 #endif // VALKYRIE_ENTITY_H_INCLUDED
