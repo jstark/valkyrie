@@ -32,7 +32,7 @@ int Model::createNode(int id, double x, double y, double z)
 
 int Model::createMaterial(int mid, double E, double rho, const std::string &name)
 {
-    std::shared_ptr<Material> m = valkyrie::try_create_material(mid, E, rho, name);
+    auto m = valkyrie::try_create_material(mid, E, rho, name);
     if (m)
     {
         return materials_.add(m);
@@ -42,8 +42,8 @@ int Model::createMaterial(int mid, double E, double rho, const std::string &name
 
 int Model::createProperty(int pid, int mid, double A, const std::string &name)
 {
-    std::shared_ptr<Material> m = materials_.find(mid);
-    std::shared_ptr<Property> p = try_create_property(pid, m, A, name);
+    auto m = materials_.find(mid);
+    auto p = try_create_property(pid, m, A, name);
     if (p)
     {
         return properties_.add(p);
@@ -53,10 +53,10 @@ int Model::createProperty(int pid, int mid, double A, const std::string &name)
 
 int Model::createRod(int eid, int pid, int nid_i, int nid_j)
 {
-    std::shared_ptr<Property> p = properties_.find(pid);
-    std::shared_ptr<Node> n1 = nodes_.find(nid_i);
-    std::shared_ptr<Node> n2 = nodes_.find(nid_j);
-    std::shared_ptr<Rod> rod = try_create_rod(eid, p, n1, n2, "");
+    auto p = properties_.find(pid);
+    auto n1 = nodes_.find(nid_i);
+    auto n2 = nodes_.find(nid_j);
+    auto rod = try_create_rod(eid, p, n1, n2, "");
     if (rod)
     {
         return elements_.add(rod);
@@ -66,8 +66,8 @@ int Model::createRod(int eid, int pid, int nid_i, int nid_j)
 
 int Model::createSpc(int sid, int dof, int nid)
 {
-    std::shared_ptr<Node> n = nodes_.find(nid);
-    std::shared_ptr<Spc > s = try_create_spc(sid, dof, n);
+    auto n = nodes_.find(nid);
+    auto s = try_create_spc(sid, dof, n);
     if (s)
     {
         return constraints_.add(s);
@@ -77,8 +77,8 @@ int Model::createSpc(int sid, int dof, int nid)
 
 int Model::createForce(int fid, int nid, double magn, double nx, double ny, double nz)
 {
-    std::shared_ptr<Node> n = nodes_.find(nid);
-    std::shared_ptr<Force> f= try_create_force(fid, n, magn, nx, ny, nz);
+    auto n = nodes_.find(nid);
+    auto f = try_create_force(fid, n, magn, nx, ny, nz);
     if (f)
     {
         return loads_.add(f);
