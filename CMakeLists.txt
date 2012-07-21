@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 2.8)
 
 project (valkyrie)
 
+set (CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+
 set (HEADERS
     ${CMAKE_SOURCE_DIR}/src/valkyrie.h
     ${CMAKE_SOURCE_DIR}/src/version.h

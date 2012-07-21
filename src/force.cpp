@@ -30,11 +30,11 @@ static int unit_vector(double x, double y, double z, double *nx, double *ny, dou
 
 std::shared_ptr<Force> valkyrie::try_create_force(int fid, std::shared_ptr<Node> n, double magn, double nx, double ny, double nz)
 {
-    Force *f = 0;
+    std::shared_ptr<Force> f;
     if (n && !unit_vector(nx, ny, nz, &nx, &ny, &nz))
     {
         LOG("[ctor][force]{fid = %d, node = %d, magnitude = %le, nx = %le, ny = %le, nz = %le}\n", fid, n->get_id(), magn, nx, ny, nz);
-        f = new Force(fid, "", n, magn, nx, ny, nz);
+        f = std::make_shared<Force>(fid, "", n, magn, nx, ny, nz);
     }
-    return make_shared(f);
+    return f;
 }
