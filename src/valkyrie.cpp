@@ -35,7 +35,7 @@ extern "C" int VKModelCreate(int mid, const char *name)
     {
         return kActionFailed | kActionErrorIdAlreadyExists;
     }
-    models.add(std::shared_ptr<Model>(new Model(mid, std::string(name ? name : ""))));
+    models.add(std::make_shared<Model>(mid, std::string(name ? name : "")));
     return kActionOK;
 }
 
@@ -71,13 +71,13 @@ extern "C" int VKModelCreateForce(int mid, int fid, int nid, double magn, double
 
 extern "C" int VKModelPerformStaticAnalysis(int mid)
 {
-    std::shared_ptr<Model> model = models.find(mid);
+    auto model = models.find(mid);
     if (!model)
     {
         return kActionFailed | kActionErrorIdDoesNotExist;
     }
 
-    std::shared_ptr<StaticAnalysisResults> res(new StaticAnalysisResults);
+    auto res = std::make_shared<StaticAnalysisResults>();
     StaticAnalysis analysis;
     int result = analysis.analyze(*model, *res);
 
@@ -126,38 +126,38 @@ namespace {
 
 extern "C" int VKStaticAnalysisForEachNodalResult(int mid, VK_FOR_EACH_NODAL_RESULT_FUNCTION fun, void *data)
 {
-    std::shared_ptr<Model> model = models.find(mid);
+    auto model = models.find(mid);
     if (!model)
     {
         return kActionFailed | kActionErrorIdDoesNotExist;
     }
 
-    ResultsDB::const_iterator iter = results.find(model);
+    auto iter = results.find(model);
     if (iter == results.end())
     {
         return kActionFailed | kStaticAnalysisResultsMissing;
     }
 
-    std::shared_ptr<StaticAnalysisResults> res = iter->second;
+    auto res = iter->second;
     std::for_each(res->beginNodalResults(), res->endNodalResults(), for_each_nodal_result(fun, data));
     return kActionOK;
 }
 
 extern "C" int VKStaticAnalysisForEachElementResult(int mid, VK_FOR_EACH_ELEMENT_RESULT_FUNCTION fun, void *data)
 {
-    std::shared_ptr<Model> model = models.find(mid);
+    auto model = models.find(mid);
     if (!model)
     {
         return kActionFailed | kActionErrorIdDoesNotExist;
     }
 
-    ResultsDB::const_iterator iter = results.find(model);
+    auto iter = results.find(model);
     if (iter == results.end())
     {
         return kActionFailed | kStaticAnalysisResultsMissing;
     }
 
-    std::shared_ptr<StaticAnalysisResults> res = iter->second;
+    auto res = iter->second;
     std::for_each(res->beginElementResults(), res->endElementResults(), for_each_element_result(fun, data));
     return kActionOK;
 }
