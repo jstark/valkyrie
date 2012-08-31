@@ -1,3 +1,5 @@
+project (lvalkyrie)
+
 include_directories (../src)
 
 set (LUA_VALKYRIE_HEADERS )
