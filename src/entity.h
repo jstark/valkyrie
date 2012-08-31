@@ -9,7 +9,7 @@
 namespace valkyrie
 {
 
-#define LOG_PROCESS                 0
+#define LOG_PROCESS                 1
 
 #define LOG(format, ...)\
     if (LOG_PROCESS) {\
@@ -45,9 +45,11 @@ class EntityDb
 public:
     typedef TEntity entity_type;
     typedef int id_type;
-    typedef std::map<id_type, std::shared_ptr<TEntity> > db_type;
+    typedef std::shared_ptr<TEntity> value_type;
+    typedef std::map<id_type, value_type> db_type;
     typedef typename db_type::size_type size_type;
     typedef typename db_type::const_iterator const_iterator;
+    typedef std::pair<id_type, value_type> pair_type;
 
 
     int add(std::shared_ptr<TEntity> ref);
