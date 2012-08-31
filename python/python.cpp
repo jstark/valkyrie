@@ -171,6 +171,38 @@ static PyObject* vk_print_static_analysis_results(PyObject *self, PyObject *args
     RETURN_SUCCESS_OR_THROW(VKStaticAnalysisPrintResults(model_id));
 }
 
+static PyObject *for_each_node_callback = NULL;
+
+static void std_for_each_node_callback(int node_id, double x, double y, double z, void *data)
+{
+    PyObject *argument_list = NULL;
+    PyObject *result = NULL;
+
+    argument_list = Py_BuildValue("(iddd)", node_id, x, y, z);
+    result = PyObject_CallObject(for_each_node_callback, argument_list);
+    Py_DECREF(argument_list);
+    Py_DECREF(result);
+}
+
+static PyObject* vk_for_each_model_node(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    PyObject *temp = NULL;
+    int ok = PyArg_ParseTuple(args, "iO:set_callback", &model_id, &temp);
+    if (!ok) return NULL;
+    if (!PyCallable_Check(temp))
+    {
+        PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+        return NULL;
+    }
+    Py_XINCREF(temp);
+    Py_XDECREF(for_each_node_callback);
+    for_each_node_callback = temp;
+    Py_INCREF(Py_None);
+
+    RETURN_SUCCESS_OR_THROW(VKModelForEachNode(model_id, std_for_each_node_callback, NULL));
+}
+
 static PyMethodDef ValkyrieMethods[] = {
 	{"major_version", vk_major_version, METH_VARARGS, "Valkyrie API major version"},
 	{"minor_version", vk_minor_version, METH_VARARGS, "Valkyrie API minor version"},
@@ -186,19 +218,20 @@ static PyMethodDef ValkyrieMethods[] = {
     {"create_force", vk_force_create, METH_VARARGS, "Create a new FE point load"},
     {"run_static_analysis", vk_run_static_analysis, METH_VARARGS, "Run a static analysis on a given model"},
     {"print_static_analysis_results", vk_print_static_analysis_results, METH_VARARGS, "Prints the results of a static analysis"},
+    {"for_each_node", vk_for_each_model_node, METH_VARARGS, "Executes a function for each model node"},
 	{NULL, NULL, 0, NULL}
 };
 
 static struct PyModuleDef valkyriemodule = {
 	PyModuleDef_HEAD_INIT,
-	"valkyrie",
+	"pyvalkyrie",
 	NULL,
 	-1,
 	ValkyrieMethods
 };
 
 PyMODINIT_FUNC
-PyInit_valkyrie(void)
+PyInit_pyvalkyrie(void)
 {
     PyObject *ref = NULL;
 
@@ -208,7 +241,7 @@ PyInit_valkyrie(void)
         return NULL;
     }
 
-    ValkyrieError = PyErr_NewException("valkyrie.error", NULL, NULL);
+    ValkyrieError = PyErr_NewException("pyvalkyrie.error", NULL, NULL);
     Py_INCREF(ValkyrieError);
     PyModule_AddObject(ref, "error", ValkyrieError);
 	return ref;

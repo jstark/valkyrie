@@ -183,6 +183,26 @@ extern DLL_PUBLIC int VKModelCreateSpc(int mid, int sid, int dofs, int nid);
 */
 extern DLL_PUBLIC int VKModelCreateForce(int mid, int fid, int nid, double magn, double nx, double ny, double nz);
 
+
+/*! \typedef void (*VK_FOR_EACH_MODEL_NODE_FUNCTION)(int node_id, double x, double y, double z, void *data);
+ *  \brief The function signature for callbacks used with \ref VKModelForEachNode.
+ *  \param node_id is the node_id
+ *  \param x is the node's x coordinate
+ *  \param y is the node's y coordinate
+ *  \param z is the node's z coordinate
+ *  \param data is a pointer to a user-defined context (can be NULL).
+ *  @see \ref VKModelForEachNode
+ */
+typedef void (*VK_FOR_EACH_MODEL_NODE_FUNCTION)(int node_id, double x, double y, double z, void *data);
+
+/*! \fn int VKModelForEachNode(int mid, VK_FOR_EACH_MODEL_NODE_FUNCTION fun, void *data);
+ *  \brief Runs a given function for each model node.
+ *  \param mid is the model id
+ *  \param fun is the given function to run
+ *  \param data is a user-defined (NULL otherwise) context.
+ */
+extern DLL_PUBLIC int VKModelForEachNode(int mid, VK_FOR_EACH_MODEL_NODE_FUNCTION fun, void *data);
+
 /*! \fn int VKModelPerformStaticAnalysis(int mid);
  * \brief Performs a static analysis on the given model (id).
  * \return Returns an error code. Use \ref VKErrorMessage to find out whether an error occurred. 

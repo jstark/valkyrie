@@ -1,6 +1,7 @@
 #include "valkyrie.h"
 #include "entity.h"
 #include "model.h"
+#include "node.h"
 #include "staticanalysis.h"
 #include <string>
 #include <map>
@@ -244,4 +245,25 @@ extern "C" int VKStaticAnalysisPrintResults(int mid)
            s_label_force);
     ret = VKStaticAnalysisForEachElementResult(mid, s_print_elemental, NULL);
     return ret;
+}
+
+extern "C" int VKModelForEachNode(int mid, VK_FOR_EACH_MODEL_NODE_FUNCTION fun, void *data)
+{
+    auto model = models.find(mid);
+    if (!model)
+    {
+        return kActionFailed | kActionErrorIdDoesNotExist;
+    }
+
+    if (!fun)
+    {
+        return kActionFailed;
+    }
+
+    std::for_each(model->beginNodes(), model->endNodes(), 
+            [&](const typename EntityDb<valkyrie::Node>::pair_type &p) { 
+                fun(p.second->get_id(), p.second->get_x(), p.second->get_y(), p.second->get_z(), data); 
+            });
+    return kActionOK;
+
 }
