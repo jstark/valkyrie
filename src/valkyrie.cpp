@@ -4,6 +4,7 @@
 #include "node.h"
 #include "rod.h"
 #include "property.h"
+#include "force.h"
 #include "staticanalysis.h"
 #include <string>
 #include <map>
@@ -284,6 +285,15 @@ extern "C" int VKModelForEachRod(int mid, VK_FOR_EACH_MODEL_ROD_FUNCTION fun, vo
 extern "C" int VKModelForEachForce(int mid, VK_FOR_EACH_MODEL_FORCE_FUNCTION fun, void *data)
 {
     RETURN_ERROR_IF_MID_IS_NOT_FOUND_OR_FUN_IS_NULL
+    std::for_each(model->beginForces(), model->endForces(),
+            [&](const typename EntityDb<valkyrie::Force>::pair_type &p) {
+                  fun(p.second->get_id(),
+                      p.second->get_magnitude(),
+                      p.second->get_nx(),
+                      p.second->get_ny(),
+                      p.second->get_nz(),
+                      p.second->get_node()->get_id());
+            });
     return kActionOK;
 }
 

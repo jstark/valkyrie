@@ -34,9 +34,9 @@ extern "C" {
 #endif
 
 #define VK_API_MAJOR 1
-#define VK_API_MINOR 0
+#define VK_API_MINOR 1
 #define VK_API_PATCH 0
-#define VK_API_VERSION "1.0.0"
+#define VK_API_VERSION "1.1.0"
 
 /*! \fn const char *VKErrorMessage(int errcode);
 * \brief Gets the error message for an error code.
