@@ -203,6 +203,36 @@ static PyObject* vk_for_each_model_node(PyObject *self, PyObject *args)
     RETURN_SUCCESS_OR_THROW(VKModelForEachNode(model_id, std_for_each_node_callback, NULL));
 }
 
+static PyObject* vk_for_each_model_rod(PyObject *self, PyObject *args)
+{
+    //TODO
+    return NULL;
+}
+
+static PyObject* vk_for_each_model_force(PyObject *self, PyObject *args)
+{
+    //TODO
+    return NULL;
+}
+
+static PyObject* vk_for_each_model_spc(PyObject *self, PyObject *args)
+{
+    //TODO
+    return NULL;
+}
+
+static PyObject* vk_for_each_model_material(PyObject *self, PyObject *args)
+{
+    //TODO
+    return NULL;
+}
+
+static PyObject* vk_for_each_model_property(PyObject *self, PyObject *args)
+{
+    //TODO
+    return NULL;
+}
+
 static PyMethodDef ValkyrieMethods[] = {
 	{"major_version", vk_major_version, METH_VARARGS, "Valkyrie API major version"},
 	{"minor_version", vk_minor_version, METH_VARARGS, "Valkyrie API minor version"},
@@ -219,6 +249,11 @@ static PyMethodDef ValkyrieMethods[] = {
     {"run_static_analysis", vk_run_static_analysis, METH_VARARGS, "Run a static analysis on a given model"},
     {"print_static_analysis_results", vk_print_static_analysis_results, METH_VARARGS, "Prints the results of a static analysis"},
     {"for_each_node", vk_for_each_model_node, METH_VARARGS, "Executes a function for each model node"},
+    {"for_each_rod", vk_for_each_model_rod, METH_VARARGS, "Executes a function for each model rod"},
+    {"for_eah_force", vk_for_each_model_force, METH_VARARGS, "Executes a function for each force entity"},
+    {"for_each_spc", vk_for_each_model_spc, METH_VARARGS, "Executes a function for each spc entity"},
+    {"for_each_material", vk_for_each_model_material, METH_VARARGS, "Executes a function for each material in the model"},
+    {"for_each_property", vk_for_each_model_property, METH_VARARGS, "Executes a function for each property in the model"},
 	{NULL, NULL, 0, NULL}
 };
 
