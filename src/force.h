@@ -19,10 +19,10 @@ public:
     IS_ENTITY
 
     std::shared_ptr<Node> get_node() { return n_; }
-    const double magnitude() const { return magnitude_; }
-    const double nx() const { return nx_; }
-    const double ny() const { return ny_; }
-    const double nz() const { return nz_; }
+    const double get_magnitude() const { return magnitude_; }
+    const double get_nx() const { return nx_; }
+    const double get_ny() const { return ny_; }
+    const double get_nz() const { return nz_; }
 private:
     std::shared_ptr<Node> n_;
     double magnitude_;
