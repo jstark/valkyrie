@@ -203,6 +203,65 @@ typedef void (*VK_FOR_EACH_MODEL_NODE_FUNCTION)(int node_id, double x, double y,
  */
 extern DLL_PUBLIC int VKModelForEachNode(int mid, VK_FOR_EACH_MODEL_NODE_FUNCTION fun, void *data);
 
+/*! \typedef void (*VK_FOR_EACH_MODEL_ROD_FUNCTION)(int rod_id, int prop_id, int first_node, int second_node);
+ *  \brief The function signature for callbacks used with \ref VKModelForEachRod
+ *  \param rod_id is the rod's id
+ *  \param prop_id is the rod's property id
+ *  \param first_node is the rod's first node id
+ *  \param second_node is the rod's second node id
+ *  @see \ref VKForEachModelRod
+ */
+typedef void (*VK_FOR_EACH_MODEL_ROD_FUNCTION)(int rod_id, int prop_id, int first_node, int second_node);
+
+/*! \fn int VKModelForEachRod(int mid, VK_FOR_EACH_MODEL_ROD_FUNCTION fun, void *data);
+ *  \brief Runs a given function for each rod element.
+ *  \param mid is the model id
+ *  \param fun is the given function to run
+ *  \param data is a user-defined (NULL otherwise) context.
+ * @see VKModelForEachNode
+ */
+extern DLL_PUBLIC int VKModelForEachRod(int mid, VK_FOR_EACH_MODEL_ROD_FUNCTION fun, void *data);
+
+/*! \typedef void (*VK_FOR_EACH_MODEL_FORCE_FUNCTION)(int force_id, double magn, double ux, double uy, double uz, int node_id);
+ *  \brief The function signature for callbacks used with \ref VKModelForEachForce
+ *  \param force_id is the force's id
+ *  \param magn is the force's magnitude
+ *  \param ux is the force's direction component in the global x direction
+ *  \param uy is the force's direction component in the global y direction
+ *  \param uz is the force's direction component in the global z direction
+ * @see VKModelForEachForce
+ */
+typedef void (*VK_FOR_EACH_MODEL_FORCE_FUNCTION)(int force_id, double magn, double ux, double uy, double uz, int node_id);
+
+/*! \fn int VKModelForEachForce(int mid, VK_FOR_EACH_MODEL_FORCE_FUNCTION fun, void *data);
+ *  \brief Runs a given function for each force entity.
+ *  \param mid is the model id
+ *  \param fun is the given function to run
+ *  \param data is a user-defined (NULL otherwise) context.
+ * @see VKModelForEachRod
+ */
+extern DLL_PUBLIC int VKModelForEachForce(int mid, VK_FOR_EACH_MODEL_FORCE_FUNCTION fun, void *data);
+
+/*! \typedef void (*VK_FOR_EACH_MODEL_SPC_FUNCTION)(int spc_id, int node_id, int xdof, int ydof, int zdof);
+ *  \brief The function signature for callbacks used with \ref VKModelForEachSpc
+ *  \param spc_id is the spc's id
+ *  \param node_id is the spc's node id
+ *  \param xdof is a flag that equals to 1 if the node is constrained in the x direction and 0 otherwise.
+ *  \param ydof is a flag that equals to 1 if the node is constrained in the y direction and 0 otherwise.
+ *  \param zdof is a flag that equals to 1 if the node is constrained in the z direction and 0 otherwise.
+ *  @see VKModelForEachSpc
+ */
+typedef void (*VK_FOR_EACH_MODEL_SPC_FUNCTION)(int spc_id, int node_id, int xdof, int ydof, int zdof);
+
+/*! \fn int VKModelForEachSpc(int mid, VK_FOR_EACH_MODEL_SPC_FUNCTION fun, void *data);
+ *  \brief Runs a given function for each spc entity.
+ *  \param mid is the model id
+ *  \param fun is the given function to run
+ *  \param data is a user-defined (NULL otherwise) context.
+ * @see VKModelForEachForce
+ */
+extern DLL_PUBLIC int VKModelForEachSpc(int mid, VK_FOR_EACH_MODEL_SPC_FUNCTION fun, void *data);
+
 /*! \fn int VKModelPerformStaticAnalysis(int mid);
  * \brief Performs a static analysis on the given model (id).
  * \return Returns an error code. Use \ref VKErrorMessage to find out whether an error occurred. 

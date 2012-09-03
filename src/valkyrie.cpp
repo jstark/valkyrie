@@ -2,6 +2,8 @@
 #include "entity.h"
 #include "model.h"
 #include "node.h"
+#include "rod.h"
+#include "property.h"
 #include "staticanalysis.h"
 #include <string>
 #include <map>
@@ -69,6 +71,14 @@ extern "C" int VKModelCreateForce(int mid, int fid, int nid, double magn, double
 {
     TRY_CREATE(Force, mid, fid, nid, magn, nx, ny, nz);
 }
+
+#define RETURN_ERROR_IF_MID_IS_NOT_FOUND_OR_FUN_IS_NULL \
+    auto model = models.find(mid);\
+    if (!model) {\
+        return kActionFailed | kActionErrorIdDoesNotExist;\
+    }\
+    if (!fun) return kActionFailed;
+
 
 extern "C" int VKModelPerformStaticAnalysis(int mid)
 {
@@ -249,17 +259,7 @@ extern "C" int VKStaticAnalysisPrintResults(int mid)
 
 extern "C" int VKModelForEachNode(int mid, VK_FOR_EACH_MODEL_NODE_FUNCTION fun, void *data)
 {
-    auto model = models.find(mid);
-    if (!model)
-    {
-        return kActionFailed | kActionErrorIdDoesNotExist;
-    }
-
-    if (!fun)
-    {
-        return kActionFailed;
-    }
-
+    RETURN_ERROR_IF_MID_IS_NOT_FOUND_OR_FUN_IS_NULL
     std::for_each(model->beginNodes(), model->endNodes(), 
             [&](const typename EntityDb<valkyrie::Node>::pair_type &p) { 
                 fun(p.second->get_id(), p.second->get_x(), p.second->get_y(), p.second->get_z(), data); 
@@ -267,3 +267,29 @@ extern "C" int VKModelForEachNode(int mid, VK_FOR_EACH_MODEL_NODE_FUNCTION fun, 
     return kActionOK;
 
 }
+
+extern "C" int VKModelForEachRod(int mid, VK_FOR_EACH_MODEL_ROD_FUNCTION fun, void *data)
+{
+    RETURN_ERROR_IF_MID_IS_NOT_FOUND_OR_FUN_IS_NULL
+    std::for_each(model->beginElems(), model->endElems(),
+            [&](const typename EntityDb<valkyrie::Rod>::pair_type &p) {
+                  fun(p.second->get_id(),
+                      p.second->get_property()->get_id(),
+                      p.second->get_node1()->get_id(),
+                      p.second->get_node2()->get_id());
+            });
+    return kActionOK;
+}
+
+extern "C" int VKModelForEachForce(int mid, VK_FOR_EACH_MODEL_FORCE_FUNCTION fun, void *data)
+{
+    RETURN_ERROR_IF_MID_IS_NOT_FOUND_OR_FUN_IS_NULL
+    return kActionOK;
+}
+
+extern "C" int VKModelForEachSpc(int mid, VK_FOR_EACH_MODEL_SPC_FUNCTION fun, void *data)
+{
+    RETURN_ERROR_IF_MID_IS_NOT_FOUND_OR_FUN_IS_NULL
+    return kActionOK;
+}
+
