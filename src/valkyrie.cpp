@@ -5,6 +5,7 @@
 #include "rod.h"
 #include "property.h"
 #include "force.h"
+#include "spc.h"
 #include "staticanalysis.h"
 #include <string>
 #include <map>
@@ -300,6 +301,14 @@ extern "C" int VKModelForEachForce(int mid, VK_FOR_EACH_MODEL_FORCE_FUNCTION fun
 extern "C" int VKModelForEachSpc(int mid, VK_FOR_EACH_MODEL_SPC_FUNCTION fun, void *data)
 {
     RETURN_ERROR_IF_MID_IS_NOT_FOUND_OR_FUN_IS_NULL
+    std::for_each(model->beginSpcs(), model->endSpcs(),
+            [&](const typename EntityDb<valkyrie::Spc>::pair_type &p) {
+                  fun(p.second->get_id(),
+                      p.second->get_node()->get_id(),
+                      p.second->is_constrained_at(kTranslateXDof),
+                      p.second->is_constrained_at(kTranslateYDof),
+                      p.second->is_constrained_at(kTranslateZDof));
+            });
     return kActionOK;
 }
 
