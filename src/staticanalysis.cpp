@@ -138,9 +138,9 @@ namespace
             int nid = n->get_id();
             int row_id = (*nid2row_)[nid];
             row_id *= MAX_DOFS_PER_NODE;
-            F_(row_id + 0) = f->magnitude() * f->nx();
-            F_(row_id + 1) = f->magnitude() * f->ny();
-            F_(row_id + 2) = f->magnitude() * f->nz();
+            F_(row_id + 0) = f->get_magnitude() * f->get_nx();
+            F_(row_id + 1) = f->get_magnitude() * f->get_ny();
+            F_(row_id + 2) = f->get_magnitude() * f->get_nz();
         }
 
         VectorXd &F_;
