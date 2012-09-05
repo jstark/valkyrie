@@ -266,22 +266,27 @@ static PyObject* vk_for_each_model_force(PyObject *self, PyObject *args)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
+static PyObject* for_each_spc_callback = NULL;
+
+static void std_for_each_spc_callback(int spc_id, int node_id, int xdof, int ydof, int zdof, void *data)
+{
+    PyObject *argument_list = NULL;
+    PyObject *result = NULL;
+
+    argument_list = Py_BuildValue("(ii(iii))", spc_id, node_id, xdof, ydof, zdof);
+    result = PyObject_CallObject(for_each_spc_callback, argument_list);
+    Py_DECREF(argument_list);
+    Py_DECREF(result);
+}
+
 static PyObject* vk_for_each_model_spc(PyObject *self, PyObject *args)
 {
-    //TODO
-    return NULL;
-}
-
-static PyObject* vk_for_each_model_material(PyObject *self, PyObject *args)
-{
-    //TODO
-    return NULL;
-}
-
-static PyObject* vk_for_each_model_property(PyObject *self, PyObject *args)
-{
-    //TODO
-    return NULL;
+    int model_id = 0;
+    if (call_function(args, for_each_spc_callback, &model_id))
+    {
+        return NULL;
+    }
+    RETURN_SUCCESS_OR_THROW(VKModelForEachSpc(model_id, std_for_each_spc_callback, NULL));
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -304,8 +309,6 @@ static PyMethodDef ValkyrieMethods[] = {
     {"for_each_rod", vk_for_each_model_rod, METH_VARARGS, "Executes a function for each model rod"},
     {"for_eah_force", vk_for_each_model_force, METH_VARARGS, "Executes a function for each force entity"},
     {"for_each_spc", vk_for_each_model_spc, METH_VARARGS, "Executes a function for each spc entity"},
-    {"for_each_material", vk_for_each_model_material, METH_VARARGS, "Executes a function for each material in the model"},
-    {"for_each_property", vk_for_each_model_property, METH_VARARGS, "Executes a function for each property in the model"},
 	{NULL, NULL, 0, NULL}
 };
 
