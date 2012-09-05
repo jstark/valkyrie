@@ -171,20 +171,6 @@ static PyObject* vk_print_static_analysis_results(PyObject *self, PyObject *args
     RETURN_SUCCESS_OR_THROW(VKStaticAnalysisPrintResults(model_id));
 }
 
-static PyObject *for_each_node_callback = NULL;
-
-static void std_for_each_node_callback(int node_id, double x, double y, double z, void *data)
-{
-    PyObject *argument_list = NULL;
-    PyObject *result = NULL;
-
-    argument_list = Py_BuildValue("(iddd)", node_id, x, y, z);
-    result = PyObject_CallObject(for_each_node_callback, argument_list);
-    Py_DECREF(argument_list);
-    Py_DECREF(result);
-}
-
-
 #define ERROR 1
 static int call_function(PyObject *args, PyObject *python_fun, int *model_id)
 {
@@ -207,6 +193,20 @@ static int call_function(PyObject *args, PyObject *python_fun, int *model_id)
 }
 #undef ERROR
 
+/*---------------------------------------------------------------------------------------------------------*/
+static PyObject *for_each_node_callback = NULL;
+
+static void std_for_each_node_callback(int node_id, double x, double y, double z, void *data)
+{
+    PyObject *argument_list = NULL;
+    PyObject *result = NULL;
+
+    argument_list = Py_BuildValue("(iddd)", node_id, x, y, z);
+    result = PyObject_CallObject(for_each_node_callback, argument_list);
+    Py_DECREF(argument_list);
+    Py_DECREF(result);
+}
+
 static PyObject* vk_for_each_model_node(PyObject *self, PyObject *args)
 {
     int model_id = 0;
@@ -217,6 +217,7 @@ static PyObject* vk_for_each_model_node(PyObject *self, PyObject *args)
     RETURN_SUCCESS_OR_THROW(VKModelForEachNode(model_id, std_for_each_node_callback, NULL));
 }
 
+/*---------------------------------------------------------------------------------------------------------*/
 static PyObject* for_each_rod_callback = NULL;
 
 static void std_for_each_rod_callback(int rod_id,int prop_id, int n1_id, int n2_id, void *data)
@@ -240,12 +241,31 @@ static PyObject* vk_for_each_model_rod(PyObject *self, PyObject *args)
     RETURN_SUCCESS_OR_THROW(VKModelForEachRod(model_id, std_for_each_rod_callback, NULL));
 }
 
-static PyObject* vk_for_each_model_force(PyObject *self, PyObject *args)
+/*---------------------------------------------------------------------------------------------------------*/
+static PyObject* for_each_force_callback = NULL;
+
+static void std_for_each_force_callback(int force_id, double magn, double ux, double uy, double uz, int node_id, void *data)
 {
-    //TODO
-    return NULL;
+    PyObject *argument_list = NULL;
+    PyObject *result = NULL;
+
+    argument_list = Py_BuildValue("(iddddi)", force_id, magn, ux, uy, uz, node_id);
+    result = PyObject_CallObject(for_each_force_callback, argument_list);
+    Py_DECREF(argument_list);
+    Py_DECREF(result);
 }
 
+static PyObject* vk_for_each_model_force(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    if (call_function(args, for_each_force_callback, &model_id))
+    {
+        return NULL;
+    }
+    RETURN_SUCCESS_OR_THROW(VKModelForEachForce(model_id, std_for_each_force_callback, NULL));
+}
+
+/*---------------------------------------------------------------------------------------------------------*/
 static PyObject* vk_for_each_model_spc(PyObject *self, PyObject *args)
 {
     //TODO
@@ -264,6 +284,7 @@ static PyObject* vk_for_each_model_property(PyObject *self, PyObject *args)
     return NULL;
 }
 
+/*---------------------------------------------------------------------------------------------------------*/
 static PyMethodDef ValkyrieMethods[] = {
 	{"major_version", vk_major_version, METH_VARARGS, "Valkyrie API major version"},
 	{"minor_version", vk_minor_version, METH_VARARGS, "Valkyrie API minor version"},
