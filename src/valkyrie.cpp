@@ -278,7 +278,8 @@ extern "C" int VKModelForEachRod(int mid, VK_FOR_EACH_MODEL_ROD_FUNCTION fun, vo
                   fun(p.second->get_id(),
                       p.second->get_property()->get_id(),
                       p.second->get_node1()->get_id(),
-                      p.second->get_node2()->get_id());
+                      p.second->get_node2()->get_id(),
+                      data);
             });
     return kActionOK;
 }
@@ -293,7 +294,8 @@ extern "C" int VKModelForEachForce(int mid, VK_FOR_EACH_MODEL_FORCE_FUNCTION fun
                       p.second->get_nx(),
                       p.second->get_ny(),
                       p.second->get_nz(),
-                      p.second->get_node()->get_id());
+                      p.second->get_node()->get_id(),
+                      data);
             });
     return kActionOK;
 }
@@ -307,7 +309,8 @@ extern "C" int VKModelForEachSpc(int mid, VK_FOR_EACH_MODEL_SPC_FUNCTION fun, vo
                       p.second->get_node()->get_id(),
                       p.second->is_constrained_at(kTranslateXDof),
                       p.second->is_constrained_at(kTranslateYDof),
-                      p.second->is_constrained_at(kTranslateZDof));
+                      p.second->is_constrained_at(kTranslateZDof),
+                      data);
             });
     return kActionOK;
 }

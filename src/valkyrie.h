@@ -211,7 +211,7 @@ extern DLL_PUBLIC int VKModelForEachNode(int mid, VK_FOR_EACH_MODEL_NODE_FUNCTIO
  *  \param second_node is the rod's second node id
  *  @see \ref VKForEachModelRod
  */
-typedef void (*VK_FOR_EACH_MODEL_ROD_FUNCTION)(int rod_id, int prop_id, int first_node, int second_node);
+typedef void (*VK_FOR_EACH_MODEL_ROD_FUNCTION)(int rod_id, int prop_id, int first_node, int second_node, void *data);
 
 /*! \fn int VKModelForEachRod(int mid, VK_FOR_EACH_MODEL_ROD_FUNCTION fun, void *data);
  *  \brief Runs a given function for each rod element.
@@ -231,7 +231,7 @@ extern DLL_PUBLIC int VKModelForEachRod(int mid, VK_FOR_EACH_MODEL_ROD_FUNCTION 
  *  \param uz is the force's direction component in the global z direction
  * @see VKModelForEachForce
  */
-typedef void (*VK_FOR_EACH_MODEL_FORCE_FUNCTION)(int force_id, double magn, double ux, double uy, double uz, int node_id);
+typedef void (*VK_FOR_EACH_MODEL_FORCE_FUNCTION)(int force_id, double magn, double ux, double uy, double uz, int node_id, void *data);
 
 /*! \fn int VKModelForEachForce(int mid, VK_FOR_EACH_MODEL_FORCE_FUNCTION fun, void *data);
  *  \brief Runs a given function for each force entity.
@@ -251,7 +251,7 @@ extern DLL_PUBLIC int VKModelForEachForce(int mid, VK_FOR_EACH_MODEL_FORCE_FUNCT
  *  \param zdof is a flag that equals to 1 if the node is constrained in the z direction and 0 otherwise.
  *  @see VKModelForEachSpc
  */
-typedef void (*VK_FOR_EACH_MODEL_SPC_FUNCTION)(int spc_id, int node_id, int xdof, int ydof, int zdof);
+typedef void (*VK_FOR_EACH_MODEL_SPC_FUNCTION)(int spc_id, int node_id, int xdof, int ydof, int zdof, void *data);
 
 /*! \fn int VKModelForEachSpc(int mid, VK_FOR_EACH_MODEL_SPC_FUNCTION fun, void *data);
  *  \brief Runs a given function for each spc entity.
