@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
+
 import argparse
-from valkyrie import *
+from pyvalkyrie import *
 
 """
-Usage: python3 valkyrie.py --file file_path
+Usage: python3 valkyrie.py --m file_path
 """
 
 ###############################################################################
@@ -26,6 +28,22 @@ class Constants:
     ANALYSIS_ACTION = 'action'
 
 ###############################################################################
+class ErrorMessages:
+    MATERIAL_ID_MISSING = 'Material Id is mandatory'
+    PROPERTY_ID_MISSING = 'Property Id is mandatory'
+    PROPERTY_AREA_LEQ_ZERO = 'Property Area must be greater than 0'
+    NODE_ID_MISSING = 'Node Id is mandatory'
+    ROD_ID_MISSING = 'Rod Id is mandatory'
+    ROD_PROPERTY_ID_MISSING = 'Rod Property Id is mandatory'
+    ROD_NODE_IDS_MISSING = 'Rod Node Ids are mandatory' 
+    SPC_ID_MISSING = 'Spc Id is mandatory'
+    SPC_DOFS_MISSING = 'Spc constrained Dofs are mandatory'
+    SPC_NODE_ID_MISSING = 'Spc Node Id is mandatory'
+    FORCE_ID_MISSING = 'Force Id is mandatory'
+    FORCE_NODE_ID_MISSING = 'Force Node Id is mandatory'
+    FORCE_DIR_VECTOR_MISSING = 'Force Direction Vector is mandatory'
+
+###############################################################################
 class Model:
     ID = 1
 
@@ -42,7 +60,7 @@ def _get_id(d):
 def _get_material_id(m):
     mid = _get_id(m)
     if mid is None:
-        raise Exception('Material "id" is mandatory!')
+        raise Exception(ErrorMessages.MATERIAL_ID_MISSING)
     return mid
 
 ###############################################################################
@@ -58,6 +76,7 @@ def _get_material_name(m):
 
 ###############################################################################
 def _material(**kwargs):
+    """example: material(id=1, E = 2.1e11, rho = 7800, name = 'steel')"""
     material_id = _get_material_id(kwargs)
     material_nm = _get_material_name(kwargs)
     Epsilon = kwargs.get(Constants.YOUNG_MODULUS, 2.1e11)
@@ -75,14 +94,14 @@ def _get_property_name(p):
 def _get_property_id(p):
     pid = _get_id(p)
     if pid is None:
-        raise Exception('Property "id" is mandatory!')
+        raise Exception(ErrorMessages.PROPERTY_ID_MISSING)
     return pid
 
 ###############################################################################
 def _get_property_material_id(p):
     mid = p.get(Constants.PROPERTY_MAT_ID, None)
     if mid is None:
-        raise Exception('Property "material" id is mandatory!')
+        raise Exception(ErrorMessages.PROPERTY_ID_MISSING)
     return mid
 
 ###############################################################################
@@ -91,7 +110,7 @@ def _get_property_area(p):
     if area > 0.0:
         return area
     else:
-        raise Exception('Property area must be greater than 0')
+        raise Exception(ErrorMessages.PROPERTY_AREA_LEQ_ZERO)
 
 ###############################################################################
 def _property(**kwargs):
@@ -105,11 +124,12 @@ def _property(**kwargs):
 def _get_node_id(n):
     node_id = n.get(Constants.ID, None)
     if node_id is None:
-        raise Exception('Node "id" is mandatory')
+        raise Exception(ErrorMessages.NODE_ID_MISSING)
     return node_id
 
 ###############################################################################
 def _node(**kwargs):
+    """example: node(id=1, x = 0.0, y = 0.5)"""
     node_id = _get_node_id(kwargs)
     x = kwargs.get(Constants.NODE_X, 0.0)
     y = kwargs.get(Constants.NODE_Y, 0.0)
@@ -120,21 +140,21 @@ def _node(**kwargs):
 def _get_rod_id(n):
     rod_id = _get_id(n)
     if rod_id is None:
-        raise Exception('Rod "id" is mandatory')
+        raise Exception(ErrorMessages.ROD_ID_MISSING)
     return rod_id
 
 ###############################################################################
 def _get_rod_property_id(n):
     pid = n.get(Constants.ROD_PROPERTY_ID, None)
     if pid is None:
-        raise Exception('Rod property id is mandatory!')
+        raise Exception(ErrorMessages.ROD_PROPERTY_ID_MISSING)
     return pid
 
 ##############################################################################
 def _get_rod_node_ids(n):
     node_ids = n.get(Constants.ROD_NODES, None)
     if node_ids is None:
-        raise Exception('Rod node ids were not given!')
+        raise Exception(ErrorMessages.ROD_NODE_IDS_MISSING)
     return node_ids
 
 ##############################################################################
@@ -148,21 +168,21 @@ def _rod(**kwargs):
 def _get_spc_id(s):
     spc_id = _get_id(s)
     if spc_id is None:
-        raise Exception('Spc "id" is mandatory')
+        raise Exception(ErrorMessages.SPC_ID_MISSING)
     return spc_id
 
 ##############################################################################
 def _get_spc_dofs(s):
     dofs = s.get(Constants.SPC_DOFS, None)
     if dofs is None:
-        raise Exception('Spc "dofs" is mandatory')
+        raise Exception(ErrorMessages.SPC_DOFS_MISSING)
     return dofs
 
 ##############################################################################
 def _get_spc_node_id(s):
     node_id = s.get(Constants.SPC_NODE_ID, None)
     if node_id is None:
-        raise Exception('Spc "node id" is mandatory')
+        raise Exception(ErrorMessages.SPC_NODE_ID_MISSING)
     return node_id
 
 ##############################################################################
@@ -176,14 +196,14 @@ def _spc(**kwargs):
 def _get_force_id(f):
     force_id = _get_id(f)
     if force_id is None:
-        raise Exception('Force "id" is mandatory')
+        raise Exception(ErrorMessages.FORCE_ID_MISSING)
     return force_id
 
 ##############################################################################
 def _get_force_node_id(f):
     node_id = f.get(Constants.FORCE_NODE_ID, None)
     if node_id is None:
-        raise Exception('Force node id is mandatory')
+        raise Exception(ErrorMessages.FORCE_NODE_ID_MISSING)
     return node_id
 
 ##############################################################################
@@ -196,7 +216,7 @@ def _get_force_magnitude(f):
 def _get_force_dir(f):
     force_dir = f.get(Constants.FORCE_DIR, None)
     if force_dir is None:
-        raise Exception('Force direction vector is mandatory')
+        raise Exception(ErrorMessages.FORCE_DIR_VECTOR_MISSING)
     return force_dir
 
 ##############################################################################
@@ -212,10 +232,45 @@ def _print_results(model_id):
     print_static_analysis_results(model_id)
 
 ##############################################################################
+def _generate_c_code():
+    pass
+
+##############################################################################
 def _static_analysis(**kwargs):
     run_static_analysis(Model.ID)
     action = kwargs.get(Constants.ANALYSIS_ACTION, _print_results)
     action(Model.ID)
+
+##############################################################################
+#                           GENERATOR FUNCTIONS                              #
+##############################################################################
+def nodes():
+    pass
+
+##############################################################################
+def rods():
+    pass
+
+##############################################################################
+def materials():
+    pass
+
+##############################################################################
+def properties():
+    pass
+
+##############################################################################
+def spcs():
+    pass
+
+##############################################################################
+def forces():
+    pass
+
+##############################################################################
+#                       END OF GENERATOR FUNCTIONS                           #
+##############################################################################
+
 
 ###############################################################################
 
@@ -227,7 +282,8 @@ GDICT = {
         'spc'      : _spc,
         'force'    : _force,
         'static_analysis' : _static_analysis,
-        'print_results' : _print_results
+        'print_results' : _print_results,
+        'generate_c_code' : _generate_c_code
         }
 
 ###############################################################################
