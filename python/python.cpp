@@ -184,29 +184,60 @@ static void std_for_each_node_callback(int node_id, double x, double y, double z
     Py_DECREF(result);
 }
 
-static PyObject* vk_for_each_model_node(PyObject *self, PyObject *args)
+
+#define ERROR 1
+static int call_function(PyObject *args, PyObject *python_fun, int *model_id)
 {
-    int model_id = 0;
     PyObject *temp = NULL;
-    int ok = PyArg_ParseTuple(args, "iO:set_callback", &model_id, &temp);
-    if (!ok) return NULL;
+
+    int ok = PyArg_ParseTuple(args, "iO:set_callback", model_id, &temp);
+    if (!ok) return ERROR;
+
     if (!PyCallable_Check(temp))
     {
         PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+        return ERROR;
+    }
+
+    Py_XINCREF(temp);
+    Py_XDECREF(python_fun);
+    python_fun = temp;
+    Py_INCREF(Py_None);
+    return 0;
+}
+#undef ERROR
+
+static PyObject* vk_for_each_model_node(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    if (call_function(args, for_each_node_callback, &model_id))
+    {
         return NULL;
     }
-    Py_XINCREF(temp);
-    Py_XDECREF(for_each_node_callback);
-    for_each_node_callback = temp;
-    Py_INCREF(Py_None);
-
     RETURN_SUCCESS_OR_THROW(VKModelForEachNode(model_id, std_for_each_node_callback, NULL));
+}
+
+static PyObject* for_each_rod_callback = NULL;
+
+static void std_for_each_rod_callback(int rod_id,int prop_id, int n1_id, int n2_id, void *data)
+{
+    PyObject *argument_list = NULL;
+    PyObject *result = NULL;
+
+    argument_list = Py_BuildValue("(iiii)", rod_id, prop_id, n1_id, n2_id);
+    result = PyObject_CallObject(for_each_rod_callback, argument_list);
+    Py_DECREF(argument_list);
+    Py_DECREF(result);
 }
 
 static PyObject* vk_for_each_model_rod(PyObject *self, PyObject *args)
 {
-    //TODO
-    return NULL;
+    int model_id = 0;
+    if (call_function(args, for_each_rod_callback, &model_id))
+    {
+        return NULL;
+    }
+    RETURN_SUCCESS_OR_THROW(VKModelForEachRod(model_id, std_for_each_rod_callback, NULL));
 }
 
 static PyObject* vk_for_each_model_force(PyObject *self, PyObject *args)
