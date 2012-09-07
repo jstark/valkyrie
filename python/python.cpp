@@ -1,5 +1,6 @@
 #include <Python.h>
 #include "valkyrie.h"
+#include <cstdio>
 
 
 // exception object
@@ -172,7 +173,7 @@ static PyObject* vk_print_static_analysis_results(PyObject *self, PyObject *args
 }
 
 #define ERROR 1
-static int call_function(PyObject *args, PyObject *python_fun, int *model_id)
+static int call_function(PyObject *args, PyObject **python_fun, int *model_id)
 {
     PyObject *temp = NULL;
 
@@ -186,8 +187,8 @@ static int call_function(PyObject *args, PyObject *python_fun, int *model_id)
     }
 
     Py_XINCREF(temp);
-    Py_XDECREF(python_fun);
-    python_fun = temp;
+    Py_XDECREF(*python_fun);
+    *python_fun = temp;
     Py_INCREF(Py_None);
     return 0;
 }
@@ -200,17 +201,17 @@ static void std_for_each_node_callback(int node_id, double x, double y, double z
 {
     PyObject *argument_list = NULL;
     PyObject *result = NULL;
-
     argument_list = Py_BuildValue("(iddd)", node_id, x, y, z);
     result = PyObject_CallObject(for_each_node_callback, argument_list);
     Py_DECREF(argument_list);
+    Py_INCREF(Py_None);
     Py_DECREF(result);
 }
 
 static PyObject* vk_for_each_model_node(PyObject *self, PyObject *args)
 {
     int model_id = 0;
-    if (call_function(args, for_each_node_callback, &model_id))
+    if (call_function(args, &for_each_node_callback, &model_id))
     {
         return NULL;
     }
@@ -228,13 +229,14 @@ static void std_for_each_rod_callback(int rod_id,int prop_id, int n1_id, int n2_
     argument_list = Py_BuildValue("(iiii)", rod_id, prop_id, n1_id, n2_id);
     result = PyObject_CallObject(for_each_rod_callback, argument_list);
     Py_DECREF(argument_list);
+    Py_INCREF(Py_None);
     Py_DECREF(result);
 }
 
 static PyObject* vk_for_each_model_rod(PyObject *self, PyObject *args)
 {
     int model_id = 0;
-    if (call_function(args, for_each_rod_callback, &model_id))
+    if (call_function(args, &for_each_rod_callback, &model_id))
     {
         return NULL;
     }
@@ -252,13 +254,14 @@ static void std_for_each_force_callback(int force_id, double magn, double ux, do
     argument_list = Py_BuildValue("(iddddi)", force_id, magn, ux, uy, uz, node_id);
     result = PyObject_CallObject(for_each_force_callback, argument_list);
     Py_DECREF(argument_list);
+    Py_INCREF(Py_None);
     Py_DECREF(result);
 }
 
 static PyObject* vk_for_each_model_force(PyObject *self, PyObject *args)
 {
     int model_id = 0;
-    if (call_function(args, for_each_force_callback, &model_id))
+    if (call_function(args, &for_each_force_callback, &model_id))
     {
         return NULL;
     }
@@ -276,13 +279,14 @@ static void std_for_each_spc_callback(int spc_id, int node_id, int xdof, int ydo
     argument_list = Py_BuildValue("(ii(iii))", spc_id, node_id, xdof, ydof, zdof);
     result = PyObject_CallObject(for_each_spc_callback, argument_list);
     Py_DECREF(argument_list);
+    Py_INCREF(Py_None);
     Py_DECREF(result);
 }
 
 static PyObject* vk_for_each_model_spc(PyObject *self, PyObject *args)
 {
     int model_id = 0;
-    if (call_function(args, for_each_spc_callback, &model_id))
+    if (call_function(args, &for_each_spc_callback, &model_id))
     {
         return NULL;
     }
