@@ -4,7 +4,7 @@ import argparse
 from pyvalkyrie import *
 
 """
-Usage: python3 valkyrie.py --m file_path
+Usage: python3 pyvalkyrie.py --m file_path
 """
 
 ###############################################################################
@@ -232,8 +232,11 @@ def _print_results(model_id):
     print_static_analysis_results(model_id)
 
 ##############################################################################
-def _generate_c_code():
-    pass
+def _postprocess():
+   print('nodes\n',nodes())
+   print('rods\n', rods())
+   print('forces\n',forces())
+   print('spcs\n', spcs())
 
 ##############################################################################
 def _static_analysis(**kwargs):
@@ -245,27 +248,27 @@ def _static_analysis(**kwargs):
 #                           GENERATOR FUNCTIONS                              #
 ##############################################################################
 def nodes():
-    pass
+    mnodes = []
+    for_each_node(Model.ID, lambda nid, x, y, z : mnodes.append((nid, x, y, z)))
+    return mnodes
 
 ##############################################################################
 def rods():
-    pass
-
-##############################################################################
-def materials():
-    pass
-
-##############################################################################
-def properties():
-    pass
+    mrods = []
+    for_each_rod(Model.ID, lambda rid, pid, fn, sn : mrods.append((rid, pid, fn, sn)))
+    return mrods
 
 ##############################################################################
 def spcs():
-    pass
+    mspcs = []
+    for_each_spc(Model.ID, lambda sid, nid, dofs : mspcs.append((sid, nid, (dofs[0], dofs[1], dofs[2]))))
+    return mspcs
 
 ##############################################################################
 def forces():
-    pass
+    mforces = []
+    for_each_force(Model.ID, lambda fid, magn, ux, uy, uz, nid : mforces.append((fid, magn, (ux, uy, uz), nid)))
+    return mforces
 
 ##############################################################################
 #                       END OF GENERATOR FUNCTIONS                           #
@@ -283,7 +286,7 @@ GDICT = {
         'force'    : _force,
         'static_analysis' : _static_analysis,
         'print_results' : _print_results,
-        'generate_c_code' : _generate_c_code
+        'postprocess' : _postprocess
         }
 
 ###############################################################################
