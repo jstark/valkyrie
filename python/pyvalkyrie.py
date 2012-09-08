@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
+import turtle
 from pyvalkyrie import *
 
 """
 Usage: python3 pyvalkyrie.py --m file_path
+
+version: v1.1
+
 """
 
 ###############################################################################
@@ -229,14 +233,26 @@ def _force(**kwargs):
 
 ##############################################################################
 def _print_results(model_id):
-    print_static_analysis_results(model_id)
+    print('NODAL RESULTS:')
+    for nr in nodal_results():
+        nid, disp, reactions = nr
+        print('{id}\t{ux}\t{uy}\t{uz}\t{rx}\t{ry}\t{rz}'.format(id=nid, ux=disp[0], uy=disp[1], uz=disp[2], rx=reactions[0], ry=reactions[1], rz=reactions[2]))
+
+    print('ROD RESULTS:')
+    for rr in rod_results():
+        rid, res = rr
+        stress, strain, reactions = res
+        print('{id}\t{s}\t{e}\t{r}'.format(id=rid, s=stress, e=strain, r=reactions))
+
 
 ##############################################################################
-def _postprocess():
-   print('nodes\n',nodes())
-   print('rods\n', rods())
-   print('forces\n',forces())
-   print('spcs\n', spcs())
+def _draw_geometry():
+    all_rods = rods()
+    all_nodes= nodes()
+    for n in all_nodes:
+        nid, x, y, z = n
+        turtle.setpos(x,y)
+        turtle.circle(5)
 
 ##############################################################################
 def _static_analysis(**kwargs):
@@ -271,6 +287,18 @@ def forces():
     return mforces
 
 ##############################################################################
+def nodal_results():
+    results = []
+    for_each_nodal_result(Model.ID, lambda nid, displ, react : results.append((nid, displ, react)))
+    return results
+
+##############################################################################
+def rod_results():
+    results = []
+    for_each_rod_result(Model.ID, lambda rid, res : results.append((rid, res)))
+    return results
+
+##############################################################################
 #                       END OF GENERATOR FUNCTIONS                           #
 ##############################################################################
 
@@ -286,7 +314,6 @@ GDICT = {
         'force'    : _force,
         'static_analysis' : _static_analysis,
         'print_results' : _print_results,
-        'postprocess' : _postprocess
         }
 
 ###############################################################################
