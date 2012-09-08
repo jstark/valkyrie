@@ -236,13 +236,13 @@ def _print_results(model_id):
     print('NODAL RESULTS:')
     for nr in nodal_results():
         nid, disp, reactions = nr
-        print('{id}\t{ux}\t{uy}\t{uz}\t{rx}\t{ry}\t{rz}'.format(id=nid, ux=disp[0], uy=disp[1], uz=disp[2], rx=reactions[0], ry=reactions[1], rz=reactions[2]))
+        print('{id}\t{ux:+8.3e}\t{uy:+8.3e}\t{uz:+8.3e}\t{rx:+8.3e}\t{ry:+8.3e}\t{rz:+8.3e}'.format(id=nid, ux=disp[0], uy=disp[1], uz=disp[2], rx=reactions[0], ry=reactions[1], rz=reactions[2]))
 
     print('ROD RESULTS:')
     for rr in rod_results():
         rid, res = rr
         stress, strain, reactions = res
-        print('{id}\t{s}\t{e}\t{r}'.format(id=rid, s=stress, e=strain, r=reactions))
+        print('{id}\t{s:+8.3e}\t{e:+8.3e}\t{r:+8.3e}'.format(id=rid, s=stress, e=strain, r=reactions))
 
 
 ##############################################################################

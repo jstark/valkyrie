@@ -9,7 +9,7 @@
 namespace valkyrie
 {
 
-#define LOG_PROCESS                 1
+#define LOG_PROCESS                 0
 
 #define LOG(format, ...)\
     if (LOG_PROCESS) {\
