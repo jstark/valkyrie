@@ -293,6 +293,56 @@ static PyObject* vk_for_each_model_spc(PyObject *self, PyObject *args)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
+static PyObject* for_each_nodal_result_callback = NULL;
+
+static void std_for_each_nodal_result_callback(int nid, double ux, double uy, double uz, double rx, double ry, double rz, void *data)
+{
+    PyObject *argument_list = NULL;
+    PyObject *result = NULL;
+
+    argument_list = Py_BuildValue("(i(ddd)(ddd))", nid, ux, uy, uz, rx, ry, rz);
+    result = PyObject_CallObject(for_each_nodal_result_callback, argument_list);
+    Py_DECREF(argument_list);
+    if (result)
+        Py_DECREF(result);
+}
+
+static PyObject* vk_for_each_nodal_result(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    if (call_function(args, &for_each_nodal_result_callback, &model_id))
+    {
+        return NULL;
+    }
+    RETURN_SUCCESS_OR_THROW(VKStaticAnalysisForEachNodalResult(model_id, std_for_each_nodal_result_callback, NULL));
+}
+
+/*---------------------------------------------------------------------------------------------------------*/
+static PyObject* for_each_rod_result_callback = NULL;
+
+static void std_for_each_rod_result_callback(int nid, double stress, double strain, double force, void *data)
+{
+    PyObject *argument_list = NULL;
+    PyObject *result = NULL;
+
+    argument_list = Py_BuildValue("(i(ddd))", nid, stress, strain, force);
+    result = PyObject_CallObject(for_each_rod_result_callback, argument_list);
+    Py_DECREF(argument_list);
+    if (result)
+        Py_DECREF(result);
+}
+
+static PyObject* vk_for_each_rod_result(PyObject *self, PyObject *args)
+{
+    int model_id = 0;
+    if (call_function(args, &for_each_rod_result_callback, &model_id))
+    {
+        return NULL;
+    }
+    RETURN_SUCCESS_OR_THROW(VKStaticAnalysisForEachElementResult(model_id, std_for_each_rod_result_callback, NULL));
+}
+
+/*---------------------------------------------------------------------------------------------------------*/
 static PyMethodDef ValkyrieMethods[] = {
 	{"major_version", vk_major_version, METH_VARARGS, "Valkyrie API major version"},
 	{"minor_version", vk_minor_version, METH_VARARGS, "Valkyrie API minor version"},
@@ -312,6 +362,8 @@ static PyMethodDef ValkyrieMethods[] = {
     {"for_each_rod", vk_for_each_model_rod, METH_VARARGS, "Executes a function for each model rod"},
     {"for_each_force", vk_for_each_model_force, METH_VARARGS, "Executes a function for each force entity"},
     {"for_each_spc", vk_for_each_model_spc, METH_VARARGS, "Executes a function for each spc entity"},
+    {"for_each_nodal_result", vk_for_each_nodal_result, METH_VARARGS, "Executes a function for each nodal result"},
+    {"for_each_rod_result", vk_for_each_rod_result, METH_VARARGS, "Executes a function for each rod result"},
 	{NULL, NULL, 0, NULL}
 };
 
