@@ -201,9 +201,7 @@ static void std_for_each_node_callback(int node_id, double x, double y, double z
     PyObject *argument_list = NULL;
     PyObject *result = NULL;
     argument_list = Py_BuildValue("(iddd)", node_id, x, y, z);
-    printf("cb = (%p)\n", for_each_node_callback);
     result = PyObject_CallObject(for_each_node_callback, argument_list);
-    printf("result = (%p)\n", result);
     Py_DECREF(argument_list);
     if (result)
         Py_DECREF(result);
